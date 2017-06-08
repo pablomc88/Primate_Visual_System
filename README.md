@@ -45,15 +45,15 @@ make install
 
 Simulation scripts are in folder 'simulation/retina' and are 5:
 
-'ex1_disk.py': retina response to light flashes, which can be disk- or ring-shaped
+* 'ex1_disk.py': retina response to light flashes, which can be disk- or ring-shaped
 
-'ex2_square.py': retina response to flashing squares
+* 'ex2_square.py': retina response to flashing squares
 
-'ex3_grating_spatial_freq.py': retina response to sine-wave gratings of varying spatial frequency
+* 'ex3_grating_spatial_freq.py': retina response to sine-wave gratings of varying spatial frequency
 
-'ex4_disk_area_response.py': retina response to flashing spots of varying diameter
+* 'ex4_disk_area_response.py': retina response to flashing spots of varying diameter
 
-'ex5_receptive_field.py': estimation of the retina receptive fields
+* 'ex5_receptive_field.py': estimation of the retina receptive fields
 
 Adjust the simulation parameters in the script and execute it using the Python interpreter, e.g.:
 
