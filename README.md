@@ -43,7 +43,7 @@ make install
 
 # Running a simulation:
 
-Simulation scripts are in folder 'simulation/retina' and are 5:
+Simulation scripts are in folder 'simulation/retina':
 
 * 'ex1_disk.py': retina response to light flashes, which can be disk- or ring-shaped
 
