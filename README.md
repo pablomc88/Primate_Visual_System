@@ -4,7 +4,7 @@ Descriptive models of the visual system have been essential to understand how re
 
 The retina model is the result of a research work and its associated publication is:
 
-Martinez-Cañada, P., Morillas, C., Pelayo, F. “A Conductance-Based Neuronal Network Model for Color Coding in the Primate Foveal Retina”. In IWINAC 2017
+* Martinez-Cañada, P., Morillas, C., Pelayo, F. “A Conductance-Based Neuronal Network Model for Color Coding in the Primate Foveal Retina”. In IWINAC 2017
 
 The rest of the code, corresponding to the thalamocortical system, will be also released after publication.
 
@@ -67,4 +67,4 @@ The size of the network and other simulation parameters, such as the number of t
 mpirun -np 8 python mpi_run.py
 ```
 
-would execute a simulation scripts with 8 MPI processes. 
+would execute a simulation script with 8 MPI processes. 
