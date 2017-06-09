@@ -431,7 +431,9 @@ path="../../data/"):
                 cell_list = np.arange(layer_sizes[j])
 
             # Only for single-trial estimation of PSTH and membrane potentials
-            if trials ==1 or spikes==False:
+            if trials ==1:
+                [data,senders,pop] = getData(population,model,recorders,cell_list)
+            if spikes==False:
                 [data,senders,pop] = getData(population,model,recorders,cell_list)
 
             # Create 2D time-average plot
