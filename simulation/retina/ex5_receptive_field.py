@@ -63,7 +63,7 @@ class experiment_5(object):
         self.stim = '_disk_'
 
         # Square mask where stimuli are displayed (side = 2*mask_side+1)
-        self.mask_side = 1
+        self.mask_side = 2
 
         # Intervals to average
         self.RF_intervals = [[310.0,350.0],[350.0,390.0],[400.0,440.0]]

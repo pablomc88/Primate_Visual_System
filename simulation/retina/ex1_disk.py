@@ -488,7 +488,7 @@ class experiment_1(object):
             fig.subplots_adjust(wspace=0.4)
 
             data_analysis.topographical(fig,self.newSimulation.Params['N'],self.topographical_time_intervals,
-            self.newSimulation.Params['resolution'],self.simtime,self.potentials,
+            self.newSimulation.Params['resolution'],self.simtime,self.spikes,
             self.top_layers_to_record,self.top_labels,self.topographical_rows,self.topographical_cols,
             self.topographical_V_mins,self.topographical_V_maxs,self.topographical_isSpikes,
             self.trials,self.top_PSTHs,self.bin_size,self.top_PSTH_index,0)

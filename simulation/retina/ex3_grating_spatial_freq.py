@@ -73,8 +73,8 @@ class experiment_3(object):
         self.grating_type = 0
 
         # Grating parameters
-#        self.spatial_frequency = np.array([0.1,0.5,1.0,2.0,3.0,4.0,5.0,6.0]) # cpd
-        self.spatial_frequency = np.array([0.1,0.5,1.0,3.0,4.0,5.0]) # cpd
+        self.spatial_frequency = np.array([0.1,0.5,1.0,2.0,3.0,4.0,5.0,6.0]) # cpd
+#        self.spatial_frequency = np.array([0.1,0.5,1.0,3.0,4.0,5.0]) # cpd
         self.temporal_frequency = 2.0 # Hz
         self.bkg_illuminance = 250.0 # td
         # Michelson contrast:
