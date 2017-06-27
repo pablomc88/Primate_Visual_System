@@ -8,7 +8,7 @@ The retina model is the result of a research work and its associated publication
 
 The rest of the code, corresponding to the thalamocortical system, will be also released after publication.
 
-The model was implemented using the well-known neural simulation tool NEST (https://github.com/nest/nest-simulator) and Python. Download, build and install NEST (version 2.11 or later). Install also CMake (version 2.8.12 or later).
+The model was implemented using the well-known neural simulation tool NEST (https://github.com/nest/nest-simulator) and Python. Download, build and install NEST (only version 2.11 for now). Install also CMake (version 2.8.12 or later).
 
 Instructions to compile the neuron models in NEST follow the tutorial about “Writing an extension module” (https://nest.github.io/nest-simulator/extension_modules). Neuron models have been written to work with NEST 2.11. We will describe how to build the model 'retina_parvo'. A similar approach can be followed to compile the other 2 models ('retina_AII_amacrine' and 'retina_ganglion_cell').
 
