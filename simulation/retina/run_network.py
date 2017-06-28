@@ -279,11 +279,10 @@ class runNetwork(object):
         # Create layers, store layer info in Python variable
         layer_IDs = []
         for l in layers:
-                exec ('%s = tp.CreateLayer(l[1])' % l[0])
-                copy_var = 0.0
-                exec ("copy_var = %s" % l[0])
-                layer_IDs.append([l[0],copy_var,l[1]['elements']])
-#                print (l[0])
+            exec ("%s = tp.CreateLayer(%s)" % (l[0],l[1]),globals())
+            exec ("copy_var = %s" % l[0],globals())
+            layer_IDs.append([l[0],copy_var,l[1]['elements']])
+#            print (l[0])
 
         print ("\n---Connecting layers---\n")
         # Create connections, need to insert variable names

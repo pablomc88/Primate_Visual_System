@@ -578,8 +578,8 @@ if __name__ == '__main__':
             ex5.saveSpikes(ex5.stim+"_bright_"+str(pos),ex5.spike_folder,trial)
 
         ex5.updateRFmaps(pos,0)
-	ex5.plotResults()
-        ex5.resetPSTHs()      
+        ex5.plotResults()
+        ex5.resetPSTHs()
 
         # Dark stimulus
         ex5.simulatePhotoreceptors(pos,1)
@@ -590,8 +590,8 @@ if __name__ == '__main__':
             ex5.saveSpikes(ex5.stim+"_dark_"+str(pos),ex5.spike_folder,trial)
 
         ex5.updateRFmaps(pos,1)
-	ex5.plotResults()
+        ex5.plotResults()
         ex5.resetPSTHs()
-        
+
 
     ex5.receptiveField()
