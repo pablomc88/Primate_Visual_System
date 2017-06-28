@@ -40,6 +40,11 @@ Compile:
 make
 make install
 ```
+It might be necessary to update also the LD_LIBRARY_PATH, e.g.:
+
+```
+export LD_LIBRARY_PATH=${NEST_INSTALL_DIR}/lib/python2.7/site-packages/nest:$LD_LIBRARY_PATH
+```
 
 # Running a simulation:
 
