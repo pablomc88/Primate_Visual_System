@@ -4,7 +4,7 @@ Descriptive models of the visual system have been essential to understand how re
 
 The retina model is the result of a research work and its associated publication is:
 
-* Martinez-Cañada, P., Morillas, C., Pelayo, F. “A Conductance-Based Neuronal Network Model for Color Coding in the Primate Foveal Retina”. In IWINAC 2017
+* Martinez-Cañada, P., Morillas, C., & Pelayo, F. (2017, June). A Conductance-Based Neuronal Network Model for Color Coding in the Primate Foveal Retina. In International Work-Conference on the Interplay Between Natural and Artificial Computation (pp. 63-74). Springer, Cham.
 
 The rest of the code, corresponding to the thalamocortical system, will be also released after publication.
 
