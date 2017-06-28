@@ -31,10 +31,7 @@ from sys import stdout
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import data_analysis
-reload(data_analysis)
-
 import run_network
-reload(run_network)
 
 class experiment_1(object):
 
@@ -64,7 +61,7 @@ class experiment_1(object):
         # disk/annulus parameters
         self.inner_radius = 0.09 # degrees (L-M pathway)
         #self.inner_radius = 0.15 # degrees (S pathway)
-        #self.inner_radius = 0.6 # degrees (full-field flash)
+#        self.inner_radius = 0.6 # degrees (full-field flash)
         self.outer_radius = 0.5 # degrees
 
         # Pulse parameters
@@ -121,7 +118,7 @@ class experiment_1(object):
 
         self.plot_intracellular = True
         self.plot_PSTH = True
-        self.plot_topographical = True
+        self.plot_topographical = False
 
         # Individual intracellular traces
         self.intracellular_rows = 6
@@ -252,7 +249,7 @@ class experiment_1(object):
             if id_found == False:
                 # Assign random layer
                 self.layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.sp_labels:
             id_found = False
@@ -263,7 +260,7 @@ class experiment_1(object):
             if id_found == False:
                 # Assign random layer
                 self.s_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.top_labels:
             # Search first for the matching spiking label
@@ -282,7 +279,7 @@ class experiment_1(object):
             if id_found == False:
                 # Assign random layer
                 self.top_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
     # Create input stimulus and simulate photoreceptors' response
     def simulatePhotoreceptors(self):
@@ -292,7 +289,7 @@ class experiment_1(object):
             center_row = int(self.newSimulation.Params['N']/2.0)
             center_col = int(self.newSimulation.Params['N']/2.0)
 
-            print "\n--- Computing input ---\n"
+            print ("\n--- Computing input ---\n")
 
             L_input = []
             M_input = []
@@ -391,7 +388,7 @@ class experiment_1(object):
     # Plot results
     def plotResults(self):
 
-        print "\n--- Plotting results ---\n"
+        print ("\n--- Plotting results ---\n")
 
         # Individual intracellular traces
         if self.plot_intracellular:
@@ -516,7 +513,7 @@ if __name__ == '__main__':
 
     ex1.simulatePhotoreceptors()
     for trial in np.arange(ex1.trials):
-        print "\n--- Trial %s ---\n" % trial
+        print ("\n--- Trial %s ---\n" % trial)
         ex1.NESTSimulation()
         ex1.saveSpikes(ex1.stim,ex1.spike_folder,trial)
     ex1.plotResults()

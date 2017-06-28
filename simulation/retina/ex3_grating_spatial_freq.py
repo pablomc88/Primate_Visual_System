@@ -42,10 +42,7 @@ from sys import stdout
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import data_analysis
-reload(data_analysis)
-
 import run_network
-reload(run_network)
 
 class experiment_3(object):
 
@@ -289,7 +286,7 @@ class experiment_3(object):
             if id_found == False:
                 # Assign random layer
                 self.layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.sp_labels:
             id_found = False
@@ -300,7 +297,7 @@ class experiment_3(object):
             if id_found == False:
                 # Assign random layer
                 self.s_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.FFT_labels:
             # Search first for the matching spiking label
@@ -319,7 +316,7 @@ class experiment_3(object):
             if id_found == False:
                 # Assign random layer
                 self.FFT_recorded_models.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
 
     # Randomize locations of cones
@@ -444,7 +441,7 @@ class experiment_3(object):
             ampl_possible_choices = [yf[main_freq-1],yf[main_freq],yf[main_freq+1]]
             phase_possible_choices = [phase[main_freq-1],phase[main_freq],phase[main_freq+1]]
 
-#            print "model = ",model," , freq = ",self.temporal_frequency," , ampl selected = ",np.max(ampl_possible_choices)
+#            print ("model = ",model," , freq = ",self.temporal_frequency," , ampl selected = ",np.max(ampl_possible_choices))
 #            plt.plot(xf,yf)
 #            plt.show()
 
@@ -464,14 +461,14 @@ class experiment_3(object):
     # Create input stimulus and simulate photoreceptors' response
     def simulatePhotoreceptors(self,stim):
 
-        print "\n--- Freq: %s cpd ---\n" % str(stim)
+        print ("\n--- Freq: %s cpd ---\n" % str(stim))
 
         if(self.newSimulation.Params['load_cone_from_file'] == False):
 
             center_row = int(self.newSimulation.Params['N']/2.0)
             center_col = int(self.newSimulation.Params['N']/2.0)
 
-            print "\n--- Computing input ---"
+            print ("\n--- Computing input ---")
 
             last_cell = 0
 
@@ -554,7 +551,7 @@ class experiment_3(object):
     # Plot results
     def plotIntermediateResults(self):
 
-        print "\n--- Plotting results ---\n"
+        print ("\n--- Plotting results ---\n")
 
         # Individual intracellular traces
         if self.plot_intracellular:
@@ -657,7 +654,7 @@ class experiment_3(object):
 
     def plotFinalResults(self):
 
-        print "\n--- Plotting results ---\n"
+        print ("\n--- Plotting results ---\n")
 
         # Plot
         fig = plt.figure()
@@ -691,7 +688,7 @@ if __name__ == '__main__':
             ex3.generate_random_mosaic = False
 
         for trial in np.arange(ex3.trials):
-            print "\n--- Trial %s ---\n" % trial
+            print ("\n--- Trial %s ---\n" % trial)
             ex3.NESTSimulation()
             ex3.saveSpikes('_sf_'+str(f),ex3.spike_folder,trial)
 

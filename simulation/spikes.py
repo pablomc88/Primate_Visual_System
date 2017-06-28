@@ -29,7 +29,6 @@ import sys,os,os.path
 import matplotlib.pyplot as plt
 
 import data_analysis
-reload(data_analysis)
 
 ## Parameters ##
 
@@ -63,35 +62,18 @@ if select_ex < 6:
     sys.path.append(os.path.join(os.path.dirname(__file__), 'retina'))
 
     import ex1_disk
-    reload(ex1_disk)
-
     import ex2_square
-    reload(ex2_square)
-
     import ex3_grating_spatial_freq
-    reload(ex3_grating_spatial_freq)
-
     import ex4_disk_area_response
-    reload(ex4_disk_area_response)
-
     import ex5_receptive_field
-    reload(ex5_receptive_field)
 
 else:
     sys.path.append(os.path.join(os.path.dirname(__file__), 'thalamocortical_system'))
 
     import ex1_flash
-    reload(ex1_flash)
-
     import ex2_grating_spatial_freq
-    reload(ex2_grating_spatial_freq)
-
     import ex3_disk_area_response
-    reload(ex3_disk_area_response)
-
     import ex4_receptive_field
-    reload(ex4_receptive_field)
-
 
 def plotPSTHs(ex,N,stim,layer_sizes,path):
 

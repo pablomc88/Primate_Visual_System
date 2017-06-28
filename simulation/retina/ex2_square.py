@@ -43,10 +43,7 @@ from sys import stdout
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import data_analysis
-reload(data_analysis)
-
 import run_network
-reload(run_network)
 
 class experiment_2(object):
 
@@ -269,7 +266,7 @@ class experiment_2(object):
             if id_found == False:
                 # Assign random layer
                 self.layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.sp_labels:
             id_found = False
@@ -280,7 +277,7 @@ class experiment_2(object):
             if id_found == False:
                 # Assign random layer
                 self.s_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.top_labels:
             # Search first for the matching spiking label
@@ -299,7 +296,7 @@ class experiment_2(object):
             if id_found == False:
                 # Assign random layer
                 self.top_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
     # Create input stimulus and simulate photoreceptors' response
     def simulatePhotoreceptors(self):
@@ -309,7 +306,7 @@ class experiment_2(object):
             center_row = int(self.newSimulation.Params['N']/2.0)
             center_col = int(self.newSimulation.Params['N']/2.0)
 
-            print "\n--- Computing input ---\n"
+            print ("\n--- Computing input ---\n")
 
             L_input = []
             M_input = []
@@ -400,7 +397,7 @@ class experiment_2(object):
     # Plot results
     def plotResults(self):
 
-        print "\n--- Plotting results ---\n"
+        print ("\n--- Plotting results ---\n")
 
         # Individual intracellular traces
         if self.plot_intracellular:
@@ -525,7 +522,7 @@ if __name__ == '__main__':
 
     ex2.simulatePhotoreceptors()
     for trial in np.arange(ex2.trials):
-        print "\n--- Trial %s ---\n" % trial
+        print ("\n--- Trial %s ---\n" % trial)
         ex2.NESTSimulation()
         ex2.saveSpikes(ex2.stim,ex2.spike_folder,trial)
     ex2.plotResults()

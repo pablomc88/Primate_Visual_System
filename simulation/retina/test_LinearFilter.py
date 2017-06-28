@@ -30,7 +30,6 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..','models'))
 
 import linear_Filter
-reload(linear_Filter)
 
 def main():
     # Filter parameters

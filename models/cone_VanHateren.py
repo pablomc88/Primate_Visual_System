@@ -34,7 +34,6 @@
 import numpy as np
 
 import linear_Filter
-reload(linear_Filter)
 
 class cone(object):
 

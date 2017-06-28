@@ -45,32 +45,19 @@ rank = comm.Get_rank()
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import data_analysis
-reload(data_analysis)
-
 import run_network
-reload(run_network)
-
 import ex1_disk
-reload(ex1_disk)
-
 import ex2_square
-reload(ex2_square)
-
 import ex3_grating_spatial_freq
-reload(ex3_grating_spatial_freq)
-
 import ex4_disk_area_response
-reload(ex4_disk_area_response)
-
 import ex5_receptive_field
-reload(ex5_receptive_field)
 
 # Experiment to simulate
 select_ex = 1
 
 # Function to be executed by every MPI process
 def worker(stim,select_ex,ex_value,aux_stimulus_value=0):
-    print "\n--- Rank: %s, Trials: %s ---\n" % (rank,stim)
+    print ("\n--- Rank: %s, Trials: %s ---\n" % (rank,stim))
 
     # Initialize mosaic of the grating only once
     if select_ex == 3:
@@ -187,7 +174,7 @@ def main():
         # Create an instance of the experiment and simulate photoreceptors (only
         # once by process with rank = 0)
         if rank==0:
-            print "\n--- Experiment value: %s ---\n" % ex_value
+            print ("\n--- Experiment value: %s ---\n" % ex_value)
             if select_ex ==1:
                 ex = ex1_disk.experiment_1()
                 ex.initializeFolders()
@@ -225,7 +212,7 @@ def main():
     # End of simulation
     if rank == 0:
         end_c = time.time()
-        print "time elapsed (h): ",(end_c - start_c)/3600.0
+        print ("time elapsed (h): ",(end_c - start_c)/3600.0)
 
 
 if __name__ == '__main__':

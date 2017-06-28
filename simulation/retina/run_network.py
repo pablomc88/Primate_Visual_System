@@ -41,7 +41,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..','networks'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..','models'))
 
 import cone_VanHateren
-reload(cone_VanHateren)
 
 # Multiprocessing computation of cone responses: target function
 def parallel_cone(pipe,cells,time,cone_input,cone_layer,Vis_dark,Vis_resting_potential):
@@ -180,14 +179,14 @@ class runNetwork(object):
 
         # Compute response
         if(self.Params['load_cone_from_file'] == False):
-            print "\n\n--- Computing photoreceptors' response ---\n"
+            print ("\n\n--- Computing photoreceptors' response ---\n")
             start_c = time.time()
 
             # Distribute simulation of cell's responses among workers
             all_cells = np.arange(len(self.cone_layers[0]))
             cells_per_process = int(len(all_cells)/self.Params['photo_processes'])
-            print "cells/process: ", cells_per_process
-            print "Processes created: ",self.Params['photo_processes']*3
+            print ("cells/process: ", cells_per_process)
+            print ("Processes created: ",self.Params['photo_processes']*3)
 
             # Process and pipe arrays
             pr_array = []
@@ -220,7 +219,7 @@ class runNetwork(object):
                     cn+=1
 
             end_c = time.time()
-            print "\n time elapsed (s): ",(end_c - start_c)
+            print ("\n time elapsed (s): ",(end_c - start_c))
 
             # Save records to file
             np.savetxt('../../data/retina/results/L_cone_response.out', self.cone_response[0])
@@ -268,7 +267,6 @@ class runNetwork(object):
 
         # import network description
         import retina
-        reload(retina)
 
         # get network info
         models, layers, conns  = retina.get_Network(self.Params)
@@ -277,21 +275,21 @@ class runNetwork(object):
         for m in models:
                 nest.CopyModel(m[0], m[1], m[2])
 
-        print "\n---Creating layers---\n"
+        print ("\n---Creating layers---\n")
         # Create layers, store layer info in Python variable
         layer_IDs = []
         for l in layers:
-                exec '%s = tp.CreateLayer(l[1])' % l[0]
+                exec ('%s = tp.CreateLayer(l[1])' % l[0])
                 copy_var = 0.0
-                exec "copy_var = %s" % l[0]
+                exec ("copy_var = %s" % l[0])
                 layer_IDs.append([l[0],copy_var,l[1]['elements']])
-#                print l[0]
+#                print (l[0])
 
-        print "\n---Connecting layers---\n"
+        print ("\n---Connecting layers---\n")
         # Create connections, need to insert variable names
         for c in conns:
                 eval('tp.ConnectLayers(%s,%s,c[2])' % (c[0], c[1]))
-#                print 'tp.ConnectLayers(%s,%s)' % (c[0], c[1])
+#                print ('tp.ConnectLayers(%s,%s)' % (c[0], c[1]))
 
         # Initialize generators with the synaptic conductance values for ON and OFF
         # bipolar cells according to the photoreceptor mosaic
@@ -392,7 +390,7 @@ class runNetwork(object):
                 nest.Connect(tgts, rec)
 
 
-        print "\n--- Simulation ---\n"
+        print ("\n--- Simulation ---\n")
         nest.SetStatus([0],{'print_time': True})
         nest.Simulate(self.Params['simtime'])
 

@@ -39,10 +39,7 @@ from sys import stdout
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import data_analysis
-reload(data_analysis)
-
 import run_network
-reload(run_network)
 
 class experiment_5(object):
 
@@ -252,7 +249,7 @@ class experiment_5(object):
             if id_found == False:
                 # Assign random layer
                 self.layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.sp_labels:
             id_found = False
@@ -263,7 +260,7 @@ class experiment_5(object):
             if id_found == False:
                 # Assign random layer
                 self.s_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.top_labels:
             # Search first for the matching spiking label
@@ -282,7 +279,7 @@ class experiment_5(object):
             if id_found == False:
                 # Assign random layer
                 self.top_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
     # Compute mask
     def createRFmask(self):
@@ -298,7 +295,7 @@ class experiment_5(object):
             col >= center_col - self.mask_side and col<= center_col + self.mask_side):
                 self.RF_mask.append([row,col])
 
-#        print "self.RF_mask = ",self.RF_mask
+#        print ("self.RF_mask = ",self.RF_mask)
 
     # Create input stimulus and simulate photoreceptors' response
     def simulatePhotoreceptors(self,pos,dark_st):
@@ -308,7 +305,7 @@ class experiment_5(object):
             center_row = self.RF_mask[pos][0]
             center_col = self.RF_mask[pos][1]
 
-            print "\n--- Computing input ---\n"
+            print ("\n--- Computing input ---\n")
 
             L_input = []
             M_input = []
@@ -393,7 +390,7 @@ class experiment_5(object):
     # Plot results
     def plotResults(self):
 
-        print "\n--- Plotting results ---\n"
+        print ("\n--- Plotting results ---\n")
 
         # Individual intracellular traces
         if self.plot_intracellular:
@@ -570,13 +567,13 @@ if __name__ == '__main__':
     ex5.createRFmask()
 
     for pos in np.arange(len(ex5.RF_mask)):
-        print "pos = %s" % pos
+        print ("pos = %s" % pos)
 
         # Bright stimulus
         ex5.simulatePhotoreceptors(pos,0)
 
         for trial in np.arange(ex5.trials):
-            print "\n--- Trial %s ---\n" % trial
+            print ("\n--- Trial %s ---\n" % trial)
             ex5.NESTSimulation()
             ex5.saveSpikes(ex5.stim+"_bright_"+str(pos),ex5.spike_folder,trial)
 
@@ -588,7 +585,7 @@ if __name__ == '__main__':
         ex5.simulatePhotoreceptors(pos,1)
 
         for trial in np.arange(ex5.trials):
-            print "\n--- Trial %s ---\n" % trial
+            print ("\n--- Trial %s ---\n" % trial)
             ex5.NESTSimulation()
             ex5.saveSpikes(ex5.stim+"_dark_"+str(pos),ex5.spike_folder,trial)
 

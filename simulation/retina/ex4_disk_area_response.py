@@ -36,10 +36,7 @@ from sys import stdout
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import data_analysis
-reload(data_analysis)
-
 import run_network
-reload(run_network)
 
 class experiment_4(object):
 
@@ -264,7 +261,7 @@ class experiment_4(object):
             if id_found == False:
                 # Assign random layer
                 self.layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.sp_labels:
             id_found = False
@@ -275,7 +272,7 @@ class experiment_4(object):
             if id_found == False:
                 # Assign random layer
                 self.s_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.top_labels:
             # Search first for the matching spiking label
@@ -294,7 +291,7 @@ class experiment_4(object):
             if id_found == False:
                 # Assign random layer
                 self.top_layers_to_record.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
         for layer in self.area_labels:
             # Search first for the matching spiking label
@@ -313,7 +310,7 @@ class experiment_4(object):
             if id_found == False:
                 # Assign random layer
                 self.area_recorded_models.append((ll[1],ll[2]))
-                print "Warning: layer %s not found!" % layer
+                print ("Warning: layer %s not found!" % layer)
 
     # Create input stimulus and simulate photoreceptors' response
     def simulatePhotoreceptors(self,diameter):
@@ -323,7 +320,7 @@ class experiment_4(object):
             center_row = int(self.newSimulation.Params['N']/2.0)
             center_col = int(self.newSimulation.Params['N']/2.0)
 
-            print "\n--- Computing input ---\n"
+            print ("\n--- Computing input ---\n")
 
             L_input = []
             M_input = []
@@ -458,7 +455,7 @@ class experiment_4(object):
     # Plot results
     def plotIntermediateResults(self):
 
-        print "\n--- Plotting results ---\n"
+        print ("\n--- Plotting results ---\n")
 
         # Individual intracellular traces
         if self.plot_intracellular:
@@ -576,7 +573,7 @@ class experiment_4(object):
 
     def plotFinalResults(self):
 
-        print "\n--- Plotting results ---\n"
+        print ("\n--- Plotting results ---\n")
         fig = plt.figure()
 
         data_analysis.spatialTuning(self.disk_diameters,self.area_amp,self.area_ph,
@@ -604,7 +601,7 @@ if __name__ == '__main__':
         ex4.simulatePhotoreceptors(d)
 
         for trial in np.arange(ex4.trials):
-            print "\n--- Trial %s ---\n" % trial
+            print ("\n--- Trial %s ---\n" % trial)
             ex4.NESTSimulation()
             ex4.saveSpikes(ex4.stim+str(d),ex4.spike_folder,trial)
 

@@ -266,7 +266,7 @@ def get_Relative_Weight(params,radius):
     l = tp.CreateLayer(layerProps)
 
     dict = {
-    "connection_type":"divergent",
+    "connection_type":"convergent",
     "mask": {"circular": {"radius": radius}},
     "kernel": 1.0,
     "weights": {"gaussian": {"p_center": 1.0, "sigma": radius/3.0}}
@@ -276,7 +276,7 @@ def get_Relative_Weight(params,radius):
     ctr = tp.FindCenterElement(l)
     targets = tp.GetTargetNodes(ctr,l)
 
-#    print "Number of targets = ",len(targets[0])
+#    print ("Number of targets = ",len(targets[0]))
 
     conn = nest.GetConnections(ctr,targets[0])
     st = nest.GetStatus(conn)
@@ -285,7 +285,7 @@ def get_Relative_Weight(params,radius):
     for n in np.arange(len(st)):
         w += st[n]['weight']
 
-#    print "Total weight = ",w
+#    print ("Total weight = ",w)
 
     return w,len(targets[0])
 
@@ -301,7 +301,7 @@ def get_Connections(params):
     # ----- Dictionary for the center RF of midget cells ----- #
 
     P_Center_dict = {
-    "connection_type":"divergent",
+    "connection_type":"convergent",
     "mask": {"circular": {"radius": 0.09}}, # 3 x sigma
     "kernel": 1.0,
     "delays" : {"normal": {"mean": 1.0, "std": 0.25, "min": params['resolution']}},
@@ -313,7 +313,7 @@ def get_Connections(params):
     # ----- Dictionary for the surround RF of midget cells ----- #
 
     P_Surround_dict = {
-    "connection_type":"divergent",
+    "connection_type":"convergent",
     "mask": {"circular": {"radius": 0.3}},
     "kernel": 1.0,
     "delays" : {"normal": {"mean": 1.0, "std": 0.25, "min": params['resolution']}},
@@ -327,7 +327,7 @@ def get_Connections(params):
     # Diffuse types contact multiple cones (mask a bit larger than center RF but
     # smaller than surround RF)
     P_S_ON_dict = {
-    "connection_type":"divergent",
+    "connection_type":"convergent",
     "mask": {"circular": {"radius": 0.15}},
     "kernel": 1.0,
     "delays" : {"normal": {"mean": 1.0, "std": 0.25, "min": params['resolution']}},
