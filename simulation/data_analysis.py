@@ -189,6 +189,8 @@ def loadSpikes(N,IDs,folder,visual_stage,stim,trial,layer_sizes,path="../../data
 def initializePSTHs(ex,visual_stage,topographical,N,labels,stim,layer_sizes,path):
 
     for tr in np.arange(ex.trials):
+        if topographical:
+            print("Trial = %s" % tr)
         # Read spikes
         if(isinstance(layer_sizes, list) == False):
             # The stimulus ID is given in the simulation script
@@ -304,7 +306,8 @@ visual_stage,path="../../data/"):
         # Plot
         if(current_row<rows and current_col<cols):
             Vax = plt.subplot2grid((rows,cols), (current_row,current_col))
-            Vax.plot( PSTH_times, PSTH_array,'b')
+#            Vax.plot( PSTH_times, PSTH_array,'b')
+            Vax.bar( PSTH_times, PSTH_array, bin_size, color="blue")
             if trials ==1:
                 Vax.plot( spike_times , np.ones(len(spike_times)) ,"r*")
             Vax.set_title(labels[j])
