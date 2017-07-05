@@ -195,7 +195,7 @@ def get_Models():
     retina_noise = 'noise_generator'
     retina_noise_params = {
     'mean': 0.0, # pA
-    'std': 1.0 # pA
+    'std': 0.2 # pA
     }
 
 
@@ -538,12 +538,25 @@ def get_Connections(params):
 
     # ----- Noise generators -> Ganglion cells ----- #
 
-    Noise_Ganglion_dict = P_Center_dict.copy()
-    Noise_Ganglion_dict.update({
-    "weights": {"gaussian": {"p_center": 1.0/conn_P_Center, "sigma": 0.03}},
+#    Noise_Ganglion_dict = P_Center_dict.copy()
+#    Noise_Ganglion_dict.update({
+#    "weights": {"gaussian": {"p_center": 1.0/conn_P_Center, "sigma": 0.03}},
+#    "sources": {"model": "retina_noise"},
+#    "targets": {"model": "retina_parvo_ganglion_cell"}
+#    })
+
+    Noise_Ganglion_dict = {
+    "connection_type":"convergent",
+    "mask": {"circular": {"radius": 0.001}}, # one-to-one connection
+    "kernel": 1.0,
+    "delays" : params['resolution'],
+    "synapse_model": "syn",
+    "weights": 1.0,
     "sources": {"model": "retina_noise"},
-    "targets": {"model": "retina_parvo_ganglion_cell"}
-    })
+    "targets": {"model": "retina_parvo_ganglion_cell"},
+    "allow_autapses":False,
+    "allow_multapses":False
+    }
 
     [allconns.append(['Noise_generators','Midget_ganglion_cells_L_ON',Noise_Ganglion_dict])]
     [allconns.append(['Noise_generators','Midget_ganglion_cells_L_OFF',Noise_Ganglion_dict])]
