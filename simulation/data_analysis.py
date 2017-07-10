@@ -33,6 +33,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from scipy import interpolate
 from mpl_toolkits.mplot3d import Axes3D
+from scipy.ndimage.filters import gaussian_filter
 
 # Get events and senders from recorders
 def getData(population,model,recorders,selected_cells):
@@ -548,19 +549,36 @@ def receptiveField(fig,N,RF_intervals,s_layers_to_record,labels,RF_bright,RF_dar
         for population, model in s_layers_to_record:
 
             # 3D plot
-            Vax = fig.add_subplot(len(s_layers_to_record),len(RF_intervals),1 +\
-            RF_index + counter*len(RF_intervals), projection='3d')
-            X = np.arange(N)
-            Y = X
-            X, Y = np.meshgrid(X, Y)
-            Z = RF_bright[RF_index,counter,:,:] - RF_dark[RF_index,counter,:,:]
-            im_plot = Vax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='coolwarm',
-                                   linewidth=0, antialiased=False)
+#            Vax = fig.add_subplot(len(s_layers_to_record),len(RF_intervals),1 +\
+#            RF_index + counter*len(RF_intervals), projection='3d')
+#            X = np.arange(N)
+#            Y = X
+#            X, Y = np.meshgrid(X, Y)
+#            Z = RF_bright[RF_index,counter,:,:] - RF_dark[RF_index,counter,:,:]
+#            # Interpolation
+#            sigma = 1.5
+#            Z_inter = gaussian_filter(Z, sigma)
+#            # Plot
+#            im_plot = Vax.plot_surface(X, Y, Z_inter, rstride=1, cstride=1, cmap='coolwarm',
+#                                   linewidth=0, antialiased=False)
 
             # 2D plot
 #            Vax = plt.subplot2grid((len(s_layers_to_record),len(RF_intervals)),(counter,RF_index))
 #            im_plot = Vax.matshow(RF_bright[RF_index,counter,:,:] - RF_dark[RF_index,counter,:,:])
 
+            # Contour Plot
+            Vax = plt.subplot2grid((len(s_layers_to_record),len(RF_intervals)),(counter,RF_index))
+            X = np.arange(N)
+            Y = X
+            X, Y = np.meshgrid(X, Y)
+            Z = RF_bright[RF_index,counter,:,:] - RF_dark[RF_index,counter,:,:]
+            # Interpolation
+            sigma = 1.5
+            Z_inter = gaussian_filter(Z, sigma)
+            # Plot
+            im_plot = Vax.contourf(X, Y, Z_inter, 10, cmap=plt.cm.coolwarm)
+
+            # axis, title
             Vax.axes.get_xaxis().set_ticks([])
             Vax.axes.get_yaxis().set_ticks([])
 
