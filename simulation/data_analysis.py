@@ -254,13 +254,14 @@ path = '../../data/'):
         else:
             [data,selected_senders,pop] = getData(population,model,recorders,[selected_cell[j]])
 
-        Vax = plt.subplot2grid((rows,cols), (current_row,current_col))
-        V_m = (data[0]['V_m'])[selected_senders[0]] # membrane potential
-        V_m = V_m[int(start_time/time_step):len(V_m)]
-        time = np.arange(start_time,sim_time+time_step,time_step)
+        if(current_row<rows and current_col<cols):
+            Vax = plt.subplot2grid((rows,cols), (current_row,current_col))
+            V_m = (data[0]['V_m'])[selected_senders[0]] # membrane potential
+            V_m = V_m[int(start_time/time_step):len(V_m)]
+            time = np.arange(start_time,sim_time+time_step,time_step)
 
-        Vax.plot( time[0:len(V_m)],V_m )
-        Vax.set_title(labels[j])
+            Vax.plot( time[0:len(V_m)],V_m )
+            Vax.set_title(labels[j])
 
         # save data
         np.savetxt(path+visual_stage+'/data/'+labels[j], V_m)
@@ -386,7 +387,8 @@ starting_col,x_axis_label,y_axis_label):
             current_row+=1
 
 
-# 2D representation of the time-average activity of every population
+# 2D representation of the time-average activity of every population. The
+# population averaged activity is computed only for spikes
 def topographical(fig,N,time_intervals,time_step,sim_time,recorders,
 recorded_models,labels,rows,cols,V_mins,V_maxs,spikes,trials,PSTHs,bin_size,
 top_PSTH_index,layer_sizes,show_pop_avg = False,visual_stage='retina',
@@ -524,7 +526,8 @@ path="../../data/"):
 
             j+=1
 
-        # Plot of the 2D activity profile for the population average
+        # Plot of the 2D activity profile for the population average (only for
+        # spikes)
         if show_pop_avg:
 
             Vax = plt.subplot2grid((rows+1,cols), (rows,n))
