@@ -139,7 +139,7 @@ def get_Models():
     "E_ex": 0.0,
     "E_in": -70.0,
     "a" : -50.0,
-    "b" : 3.0
+    "b" : 4.0
     }
 
     # ON Midget bipolar cell
@@ -147,11 +147,11 @@ def get_Models():
     retina_parvo_ON_bipolar_cell_params = {
     "C_m": 100.0,
     "g_L": 10.0,
-    "E_L": -54.0,
+    "E_L": -60.0,
     "E_ex": 0.0,
     "E_in": -70.0,
-    "a" : -35.0,
-    "b" : 3.0
+    "a" : -40.0,
+    "b" : 4.0
     }
 
     # OFF Midget bipolar cell
@@ -159,11 +159,11 @@ def get_Models():
     retina_parvo_OFF_bipolar_cell_params = {
     "C_m": 100.0,
     "g_L": 10.0,
-    "E_L": -45.0,
+    "E_L": -50.0,
     "E_ex": 0.0,
     "E_in": -70.0,
-    "a" : -35.0,
-    "b" : 3.0
+    "a" : -40.0,
+    "b" : 4.0
     }
 
     # AII amacrine cell
@@ -173,15 +173,15 @@ def get_Models():
     "g_L": 10.0,
     "E_L": -60.0,
     "a" : -55.0,
-    "b" : 3.0,
-    "g_ex": 10.0
+    "b" : 4.0,
+    "g_ex": 20.0
     }
 
     # Midget ganglion cell
     retina_parvo_ganglion_cell  = 'ganglion_cell'
     retina_parvo_ganglion_cell_params = {
     "C_m": 100.0,
-    "g_L": 20.0,
+    "g_L": 10.0,
     "E_ex": 0.0,
     "E_in": -70.0,
     "E_L": -60.0,
@@ -350,28 +350,28 @@ def get_Connections(params):
 
     Cones_Bipolar_L_ON_dict = Cones_Bipolar_dict.copy()
     # from [4], center radius of P cells
-    Cones_Bipolar_L_ON_dict.update({"weights": {"gaussian": {"p_center": 3.0/conn_P_Center, "sigma": 0.03}},
+    Cones_Bipolar_L_ON_dict.update({"weights": {"gaussian": {"p_center": 5.0/conn_P_Center, "sigma": 0.03}},
     "targets": {"model": "retina_parvo_ON_bipolar_cell"}})
 
     Cones_Bipolar_L_OFF_dict = Cones_Bipolar_dict.copy()
-    Cones_Bipolar_L_OFF_dict.update({"weights": {"gaussian": {"p_center": 2.5/conn_P_Center, "sigma": 0.03}},
+    Cones_Bipolar_L_OFF_dict.update({"weights": {"gaussian": {"p_center": 6.5/conn_P_Center, "sigma": 0.03}},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"}})
 
     Cones_Bipolar_M_ON_dict = Cones_Bipolar_dict.copy()
-    Cones_Bipolar_M_ON_dict.update({"weights": {"gaussian": {"p_center": 3.0/conn_P_Center, "sigma": 0.03}},
+    Cones_Bipolar_M_ON_dict.update({"weights": {"gaussian": {"p_center": 5.0/conn_P_Center, "sigma": 0.03}},
     "targets": {"model": "retina_parvo_ON_bipolar_cell"}})
 
     Cones_Bipolar_M_OFF_dict = Cones_Bipolar_dict.copy()
-    Cones_Bipolar_M_OFF_dict.update({"weights": {"gaussian": {"p_center": 2.5/conn_P_Center, "sigma": 0.03}},
+    Cones_Bipolar_M_OFF_dict.update({"weights": {"gaussian": {"p_center": 6.5/conn_P_Center, "sigma": 0.03}},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"}})
 
     Cones_Diffuse_bipolar_dict = P_S_ON_dict.copy()
-    Cones_Diffuse_bipolar_dict.update({"weights": {"gaussian": {"p_center": 1.0/conn_P_S_ON, "sigma": 0.05}},
+    Cones_Diffuse_bipolar_dict.update({"weights": {"gaussian": {"p_center": 3.25/conn_P_S_ON, "sigma": 0.05}},
     "sources": {"model": "generator"},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"}})
 
     Cones_S_Bipolar_dict = P_S_ON_dict.copy()
-    Cones_S_Bipolar_dict.update({"weights": {"gaussian": {"p_center": 3.0/conn_P_S_ON, "sigma": 0.05}},
+    Cones_S_Bipolar_dict.update({"weights": {"gaussian": {"p_center": 5.0/conn_P_S_ON, "sigma": 0.05}},
     "sources": {"model": "generator"},
     "targets": {"model": "retina_parvo_ON_bipolar_cell"}})
 
@@ -409,7 +409,7 @@ def get_Connections(params):
     Cones_Horizontal_H2_dict_LM.update({
     "weights": {"gaussian": {"p_center": 1.0/conn_P_Surround, "sigma": 0.1}}})
 
-    # Horizontal cell type H1: receives input from L and M cones (but not S.
+    # Horizontal cell type H1: receives input from L and M cones (but not S cones)
     [allconns.append(['L_cones_ionotropic','H1_Horizontal_cells',Cones_Horizontal_H1_dict])]
     [allconns.append(['M_cones_ionotropic','H1_Horizontal_cells',Cones_Horizontal_H1_dict])]
 
@@ -430,24 +430,24 @@ def get_Connections(params):
 
     # ON bipolar cells receive excitatory synapses from horizontal cells
     Horizontal_H1_Bipolar_L_ON_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H1_Bipolar_L_ON_dict.update({"weights": {"gaussian": {"p_center": 2.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H1_Bipolar_L_ON_dict.update({"weights": {"gaussian": {"p_center": 3.5/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_ON_bipolar_cell"} })
     Horizontal_H1_Bipolar_M_ON_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H1_Bipolar_M_ON_dict.update({"weights": {"gaussian": {"p_center": 2.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H1_Bipolar_M_ON_dict.update({"weights": {"gaussian": {"p_center": 3.5/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_ON_bipolar_cell"} })
     Horizontal_H2_Bipolar_S_ON_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H2_Bipolar_S_ON_dict.update({"weights": {"gaussian": {"p_center": 2.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H2_Bipolar_S_ON_dict.update({"weights": {"gaussian": {"p_center": 3.5/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_ON_bipolar_cell"} })
 
     # OFF bipolar cells receive inhibitory synapses from horizontal cells
     Horizontal_H1_Bipolar_L_OFF_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H1_Bipolar_L_OFF_dict.update({"weights": {"gaussian": {"p_center": -3.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H1_Bipolar_L_OFF_dict.update({"weights": {"gaussian": {"p_center": -5.0/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"}  })
     Horizontal_H1_Bipolar_M_OFF_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H1_Bipolar_M_OFF_dict.update({"weights": {"gaussian": {"p_center": -3.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H1_Bipolar_M_OFF_dict.update({"weights": {"gaussian": {"p_center": -5.0/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"} })
     Horizontal_H1_Diffuse_bipolar_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H1_Diffuse_bipolar_dict.update({"weights": {"gaussian": {"p_center": -2.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H1_Diffuse_bipolar_dict.update({"weights": {"gaussian": {"p_center": -5.0/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"} })
 
     [allconns.append(['H1_Horizontal_cells','Midget_bipolar_cells_L_ON',Horizontal_H1_Bipolar_L_ON_dict])]
@@ -476,7 +476,7 @@ def get_Connections(params):
     Amacrine_Bipolar_dict.update({
     "sources": {"model": "retina_parvo_amacrine_cell"},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"},
-    "weights": {"gaussian": {"p_center": -2.0/conn_P_Center, "sigma": 0.03}}
+    "weights": {"gaussian": {"p_center": -1.0/conn_P_Center, "sigma": 0.03}}
     })
 
     [allconns.append(['AII_amacrine_cells','Midget_bipolar_cells_L_OFF',Amacrine_Bipolar_dict])]
@@ -488,7 +488,7 @@ def get_Connections(params):
     Amacrine_Ganglion_dict.update({
     "sources": {"model": "retina_parvo_amacrine_cell"},
     "targets": {"model": "retina_parvo_ganglion_cell"},
-    "weights": {"gaussian": {"p_center": -10.0/conn_P_Center, "sigma": 0.03}}
+    "weights": {"gaussian": {"p_center": -1.0/conn_P_Center, "sigma": 0.03}}
     })
 
     [allconns.append(['AII_amacrine_cells','Midget_ganglion_cells_L_OFF',Amacrine_Bipolar_dict])]
@@ -503,27 +503,27 @@ def get_Connections(params):
     })
 
     L_ON_Bipolar_L_ON_Ganglion_dict = Bipolar_Ganglion_dict.copy()
-    L_ON_Bipolar_L_ON_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 30.0/conn_P_Center, "sigma": 0.03}},
+    L_ON_Bipolar_L_ON_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 4.0/conn_P_Center, "sigma": 0.03}},
     "sources": {"model": "retina_parvo_ON_bipolar_cell"}})
 
     L_OFF_Bipolar_L_OFF_Ganglion_dict = Bipolar_Ganglion_dict.copy()
-    L_OFF_Bipolar_L_OFF_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 30.0/conn_P_Center, "sigma": 0.03}},
+    L_OFF_Bipolar_L_OFF_Ganglion_dict.update({"weights": {"gaussian": {"p_center":4.0/conn_P_Center, "sigma": 0.03}},
     "sources": {"model": "retina_parvo_OFF_bipolar_cell"}})
 
     M_ON_Bipolar_M_ON_Ganglion_dict = Bipolar_Ganglion_dict.copy()
-    M_ON_Bipolar_M_ON_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 30.0/conn_P_Center, "sigma": 0.03}},
+    M_ON_Bipolar_M_ON_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 4.0/conn_P_Center, "sigma": 0.03}},
     "sources": {"model": "retina_parvo_ON_bipolar_cell"}})
 
     M_OFF_Bipolar_M_OFF_Ganglion_dict = Bipolar_Ganglion_dict.copy()
-    M_OFF_Bipolar_M_OFF_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 30.0/conn_P_Center, "sigma": 0.03}},
+    M_OFF_Bipolar_M_OFF_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 4.0/conn_P_Center, "sigma": 0.03}},
     "sources": {"model": "retina_parvo_OFF_bipolar_cell"}})
 
     Diffuse_Bipolar_Small_bistratified_Ganglion_dict = Bipolar_Ganglion_dict.copy()
-    Diffuse_Bipolar_Small_bistratified_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 15.0/conn_P_Center, "sigma": 0.03}},
+    Diffuse_Bipolar_Small_bistratified_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 2.0/conn_P_Center, "sigma": 0.03}},
     "sources": {"model": "retina_parvo_OFF_bipolar_cell"}})
 
     S_cone_bipolar_Small_bistratified_Ganglion_dict = Bipolar_Ganglion_dict.copy()
-    S_cone_bipolar_Small_bistratified_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 15.0/conn_P_Center, "sigma": 0.03}},
+    S_cone_bipolar_Small_bistratified_Ganglion_dict.update({"weights": {"gaussian": {"p_center": 2.0/conn_P_Center, "sigma": 0.03}},
     "sources": {"model": "retina_parvo_ON_bipolar_cell"}})
 
     [allconns.append(['Midget_bipolar_cells_L_ON','Midget_ganglion_cells_L_ON',L_ON_Bipolar_L_ON_Ganglion_dict])]
