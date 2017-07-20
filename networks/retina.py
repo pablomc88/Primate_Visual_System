@@ -441,13 +441,13 @@ def get_Connections(params):
 
     # OFF bipolar cells receive inhibitory synapses from horizontal cells
     Horizontal_H1_Bipolar_L_OFF_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H1_Bipolar_L_OFF_dict.update({"weights": {"gaussian": {"p_center": -5.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H1_Bipolar_L_OFF_dict.update({"weights": {"gaussian": {"p_center": -6.0/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"}  })
     Horizontal_H1_Bipolar_M_OFF_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H1_Bipolar_M_OFF_dict.update({"weights": {"gaussian": {"p_center": -5.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H1_Bipolar_M_OFF_dict.update({"weights": {"gaussian": {"p_center": -6.0/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"} })
     Horizontal_H1_Diffuse_bipolar_dict = Horizontal_Bipolar_dict.copy()
-    Horizontal_H1_Diffuse_bipolar_dict.update({"weights": {"gaussian": {"p_center": -5.0/conn_P_Surround, "sigma": 0.1}},
+    Horizontal_H1_Diffuse_bipolar_dict.update({"weights": {"gaussian": {"p_center": -6.0/conn_P_Surround, "sigma": 0.1}},
     "targets": {"model": "retina_parvo_OFF_bipolar_cell"} })
 
     [allconns.append(['H1_Horizontal_cells','Midget_bipolar_cells_L_ON',Horizontal_H1_Bipolar_L_ON_dict])]
