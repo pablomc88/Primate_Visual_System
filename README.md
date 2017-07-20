@@ -6,7 +6,7 @@ The retina model is the result of a research work and its associated publication
 
 * Martinez-Cañada, P., Morillas, C., & Pelayo, F. (2017, June). A Conductance-Based Neuronal Network Model for Color Coding in the Primate Foveal Retina. In International Work-Conference on the Interplay Between Natural and Artificial Computation (pp. 63-74). Springer, Cham.
 
-The rest of the code, corresponding to the thalamocortical system, will be also released after publication.
+Some parameters of the retina model has been modified compared to the publication above. The rest of the code, corresponding to the thalamocortical system, will be released after a prospective publication about the whole visual model.
 
 The model was implemented using the well-known neural simulation tool NEST (https://github.com/nest/nest-simulator) and Python. Download, build and install NEST (version 2.12.0). Install also CMake (version 2.8.12 or later).
 
