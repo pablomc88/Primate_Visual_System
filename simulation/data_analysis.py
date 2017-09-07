@@ -316,10 +316,10 @@ visual_stage,path="../../data/"):
             Vax.set_title(labels[j])
 
         # save data
-        np.savetxt(path+visual_stage+'/data/'+labels[j]+'_PSTH', PSTH_array[0::10])
+        np.savetxt(path+visual_stage+'/data/'+labels[j]+'_PSTH', PSTH_array)
 
         if j==0:
-            np.savetxt(path+visual_stage+'/data/PSTH_times_interp', PSTH_times[0::10])
+            np.savetxt(path+visual_stage+'/data/PSTH_times_interp', PSTH_times)
 
         if(current_col<cols-1):
             current_col+=1
