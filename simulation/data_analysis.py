@@ -438,7 +438,7 @@ path="../../data/"):
                 cell_list = np.arange(layer_sizes[j])
 
             # Only for single-trial estimation of PSTH and membrane potentials
-            if trials ==1:
+            if trials ==1 and spikes:
                 [data,senders,pop] = getData(population,model,recorders,cell_list)
             if spikes==False:
                 [data,senders,pop] = getData(population,model,recorders,cell_list)
@@ -519,10 +519,10 @@ path="../../data/"):
                 Vax.axes.get_yaxis().set_ticks([])
 
                 # Save image
-#                fake_fig = plt.figure()
-#                im_plot = plt.matshow(im,vmin=V_mins[j], vmax=V_maxs[j])
-#                plt.axis('off')
-#                plt.savefig(path+visual_stage+'/data/'+str(model)+str(n)+'.png')
+                fake_fig = plt.figure()
+                im_plot = plt.matshow(im,vmin=V_mins[j], vmax=V_maxs[j])
+                plt.axis('off')
+                plt.savefig(path+visual_stage+'/data/'+labels[j]+str(n)+'.png')
 
             j+=1
 
@@ -618,3 +618,127 @@ def videoSeq(number_cells,inputIm,simtime,resolution,video_step):
         linewidth=0, antialiased=False)
         ax.set_title('Input stimulus. Time = %s ms'%str(t),y=1.08)
         ax.axes.figure.canvas.draw()
+
+# Estimation of Local Field Potential(LFP)
+def updateLFP(LFP_records,recorders,recorded_models,layer_sizes,E_ex,E_in):
+
+    j = 0
+
+    for population, model in recorded_models:
+
+        # List of cell IDs
+        if(isinstance(layer_sizes, list) == False):
+            cell_list = np.arange(layer_sizes**2)
+        else:
+            cell_list = np.arange(layer_sizes[j])
+
+        [data,senders,pop] = getData(population,model,recorders,cell_list)
+
+        # Membrane potential
+        if 'V_m' in data[0]:
+            average_potential = np.zeros(len((data[0]['V_m'])[np.where(senders==pop[0])]))
+        else:
+            average_potential = np.zeros(len(LFP_records[0,j,:]))
+
+        # Synaptic currents
+        if 'g_ex' in data[0]:
+            average_currents_ex = np.zeros(len((data[0]['g_ex'])[np.where(senders==pop[0])]))
+        else:
+            average_currents_ex = np.zeros(len(LFP_records[1,j,:]))
+
+        if 'g_in' in data[0]:
+            average_currents_in = np.zeros(len((data[0]['g_in'])[np.where(senders==pop[0])]))
+        else:
+            average_currents_in = np.zeros(len(LFP_records[2,j,:]))
+
+        for cell in cell_list:
+
+            if 'V_m' in data[0]:
+                average_potential += (data[0]['V_m'])[np.where(senders==pop[cell])]
+
+            if 'g_ex' in data[0]:
+                if 'V_m' in data[0]:
+                    average_currents_ex += (data[0]['g_ex'])[np.where(senders==pop[cell])] *\
+                    ((data[0]['V_m'])[np.where(senders==pop[cell])] - E_ex[j])
+                else:
+                    average_currents_ex += (data[0]['g_ex'])[np.where(senders==pop[cell])]
+
+            if 'g_in' in data[0]:
+                if 'V_m' in data[0]:
+                    average_currents_in += (data[0]['g_in'])[np.where(senders==pop[cell])] *\
+                    ((data[0]['V_m'])[np.where(senders==pop[cell])] - E_in[j])
+                else:
+                    average_currents_in += (data[0]['g_in'])[np.where(senders==pop[cell])]
+
+
+        average_potential /= len(cell_list)
+        average_currents_ex /= len(cell_list)
+        average_currents_in /= len(cell_list)
+
+        LFP_records[0,j,:] += average_potential
+        LFP_records[1,j,:] += average_currents_ex
+        LFP_records[2,j,:] += average_currents_in
+
+        j+=1
+
+def LFP(plot_type,LFP_records,trials,start_time,time_step,sim_time,recorded_models,
+PSTHs,top_PSTH_index,bin_size,labels,rows,cols,starting_row,starting_col,visual_stage,
+layer_sizes,path = '../../data/'):
+
+    j = 0
+    spike_j = 0
+    current_row = starting_row
+    current_col = starting_col
+
+    for population, model in recorded_models:
+
+        if(current_row<rows and current_col<cols):
+            Vax = plt.subplot2grid((rows,cols), (current_row,current_col))
+
+            # Membrane potential and synaptic currents
+            if plot_type < 3:
+                average_record = LFP_records[plot_type,j,:] / trials
+                y = average_record[int(start_time/time_step):len(average_record)]
+                time = np.arange(start_time,sim_time+time_step,time_step)
+                time = time[0:len(y)]
+
+            # Firing rates
+            else:
+                if model == 'retina_parvo_ganglion_cell' or model=='LGN_relay_cell' or\
+                model == 'LGN_interneuron' or model=='Cortex_excitatory_cell' or\
+                model=='Cortex_inhibitory_cell':
+                    # List of cell IDs
+                    if(isinstance(layer_sizes, list) == False):
+                        cell_list = np.arange(layer_sizes**2)
+                    else:
+                        cell_list = np.arange(layer_sizes[j])
+
+                    average_record = (1000.0/bin_size) *\
+                    np.sum(PSTHs[:,top_PSTH_index[spike_j],:],axis=0) / (trials * len(cell_list))
+
+                    y = average_record[int(start_time/bin_size):len(average_record)]
+                    time = np.arange(start_time,sim_time,bin_size)
+
+                    spike_j+=1
+
+                else:
+                    y = np.zeros(2)
+                    time = np.zeros(2)
+
+            Vax.plot(time,y)
+            Vax.set_title(labels[j])
+
+        # save data
+        np.savetxt(path+visual_stage+'/data/'+labels[j]+'_'+str(plot_type), y)
+        if j==0:
+            np.savetxt(path+visual_stage+'/data/time', time)
+
+        if(current_col<cols-1):
+            current_col+=1
+        else:
+            current_col = 0
+            current_row+=1
+
+        j+=1
+
+    Vax.set_xlabel('time (ms)')
