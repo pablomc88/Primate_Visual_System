@@ -519,10 +519,10 @@ path="../../data/"):
                 Vax.axes.get_yaxis().set_ticks([])
 
                 # Save image
-                fake_fig = plt.figure()
-                im_plot = plt.matshow(im,vmin=V_mins[j], vmax=V_maxs[j])
-                plt.axis('off')
-                plt.savefig(path+visual_stage+'/data/'+labels[j]+str(n)+'.png')
+#                fake_fig = plt.figure()
+#                im_plot = plt.matshow(im,vmin=V_mins[j], vmax=V_maxs[j])
+#                plt.axis('off')
+#                plt.savefig(path+visual_stage+'/data/'+labels[j]+str(n)+'.png')
 
             j+=1
 
