@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -12,19 +12,23 @@
 # Name: cone_VanHateren
 #
 # Description: Python implementation of the model of primate cones and horizontal
-# cells by Van Hateren [2] that describes adaptation to the mean background intensity.
+# cells by Van Hateren [3] that describes adaptation to the mean background intensity.
 # The cone-horizontal cell feedback loop corresponds to the linear version
-# (Fig. 5 A [1]). When the model is simulated without horizontal-cell feedback,
+# (Fig. 5 A [3]). When the model is simulated without horizontal-cell feedback,
 # the output is read from the voltage of the inner segment, Vis, which is assumed
 # to be the membrane potential of the cone.
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
-# [2] van Hateren, Hans. "A cellular and molecular model of response kinetics
+# [3] van Hateren, Hans. "A cellular and molecular model of response kinetics
 # and adaptation in primate cones and horizontal cells." Journal of vision 5.4
 # (2005): 5-5
 #

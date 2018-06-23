@@ -44,7 +44,7 @@ namespace mynest
 {
 
 /*
-This file is part of the project published in [5]. The software is licensed
+This file is part of the project published in [5,6]. The software is licensed
 under the GNU General Public License. You should have received a copy of the
 GNU General Public License along with the source code.
 
@@ -116,7 +116,11 @@ reciprocally inhibitory model neurons." Neural computation 4.1 (1992): 84-97.
 currents, neuromodulation and kinetic models." The handbook of brain theory and
 neural networks 66 (1995): 617-648.
 
-[5] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+[5] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+International Journal of Neural Systems. Accepted for publication.
+
+[6] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 2017
 

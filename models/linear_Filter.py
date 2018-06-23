@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -19,15 +19,19 @@
 # Y (k) = sum_j bj X(k-j) - sum_i ai Y(k-i)
 #
 # where X(k−j) are the preceding input values. Coefficients ai and bj are
-# calculated for each filter according to the equations provided in [2].
+# calculated for each filter according to the equations provided in [3].
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
-# [2] Wohrer, Adrien, and Pierre Kornprobst. "Virtual retina: a biological
+# [3] Wohrer, Adrien, and Pierre Kornprobst. "Virtual retina: a biological
 # retina model and simulator, with contrast gain control." Journal of
 # computational neuroscience 26.2 (2009): 219-249.
 #

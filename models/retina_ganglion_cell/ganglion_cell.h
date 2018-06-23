@@ -44,7 +44,7 @@ namespace mynest
 {
 
 /*
-This file is part of the project published in [1]. The software is licensed
+This file is part of the project published in [1,2]. The software is licensed
 under the GNU General Public License. You should have received a copy of the
 GNU General Public License along with the source code.
 
@@ -81,7 +81,11 @@ SeeAlso: parvo_neuron, iaf_cond_alpha
 
 References:
 
-[1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+[1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+International Journal of Neural Systems. Accepted for publication.
+
+[2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 2017
 
