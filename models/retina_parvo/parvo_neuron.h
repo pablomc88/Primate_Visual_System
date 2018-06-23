@@ -266,6 +266,8 @@ private:
       enum StateVecElems
       {
         V_m = 0,
+        G_EXC,
+        G_INH,
         STATE_VEC_SIZE
       };
 
@@ -363,6 +365,14 @@ private:
     return S_.y[State_::V_m];
   }
   /** @} */
+
+  //! Read out state vector elements, used by UniversalDataLogger
+  template < State_::StateVecElems elem >
+  double
+  get_y_elem_() const
+  {
+    return S_.y[ elem ];
+  }
 
   /**
    * @defgroup Member variables of neuron model.

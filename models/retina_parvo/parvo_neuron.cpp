@@ -62,6 +62,11 @@ RecordablesMap< mynest::parvo_neuron >::create()
 {
   // use standard names whereever you can for consistency!
   insert_( names::V_m, &mynest::parvo_neuron::get_V_m_ );
+
+  insert_( names::g_ex,
+    &mynest::parvo_neuron::get_y_elem_< mynest::parvo_neuron::State_::G_EXC > );
+  insert_( names::g_in,
+    &mynest::parvo_neuron::get_y_elem_< mynest::parvo_neuron::State_::G_INH > );
 }
 }
 
@@ -336,6 +341,9 @@ mynest::parvo_neuron::update( Time const& origin,
     // from different sources)
     B_.I_stim_exc = B_.currents_exc.get_value( lag );
     B_.I_stim_inh = B_.currents_inh.get_value( lag );
+
+    S_.y[ State_::G_EXC ] = B_.I_stim_exc;
+    S_.y[ State_::G_INH ] = B_.I_stim_inh;
 
     // log state data
     B_.logger_.record_data( origin.get_steps() + lag );
