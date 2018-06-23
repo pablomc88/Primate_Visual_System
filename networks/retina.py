@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -13,14 +13,14 @@
 #
 # Description:
 #
-# This script defines the network model using the Topology module of NEST. It
-# specifies neuron models, two-dimensional neuronal layers and connections.
+# This script defines the network model of the retina. It specifies its neuron models,
+# two-dimensional neuronal layers and connections.
 #
 # We made certain assumptions about the model:
 #
 # 1) Photoreceptors release only one type of neurotransmitter, glutamate.
 # However, bipolar cells react to this stimulus with two different responses,
-# ON-center and OFF-center responses [2,3]. Ionotropic glutamate receptors are
+# ON-center and OFF-center responses [3,4]. Ionotropic glutamate receptors are
 # positively coupled to the synaptic cation channel of OFF bipolar cells, which
 # is opened with an increase of glutamate. On the contrary, ON bipolar cells
 # are negatively coupled to the synaptic cation channel and glutamate acts
@@ -39,7 +39,7 @@
 # horizontal cells can evoke opposite responses. One evidence suggests that
 # GABA evokes opposite responses if chloride equilibrium potentials of the
 # synaptic chloride channel in the two bipolar cell types are on opposite sides
-# of the bipolar cell’s resting potential [4]. In our model, ON bipolar cells
+# of the bipolar cell’s resting potential [5]. In our model, ON bipolar cells
 # receive excitatory synapses from horizontal cells, which have a positive
 # reversal potential taking as a reference the bipolar cell’s resting potential
 # (0 mV), and OFF bipolar cells receive inhibitory synapses, which have a
@@ -47,9 +47,9 @@
 #
 # 3) Among all types of amacrine cells, the model includes only the AII
 # amacrine cell (narrow-field, bistratified) since it is the most studied
-# amacrine cell and the most numerous type in the mammalian retina [5]. It is
+# amacrine cell and the most numerous type in the mammalian retina [6]. It is
 # shown that the AII amacrine functionality extends to cone-mediated (photopic)
-# vision [6,7]. Under cone-driven conditions, ON cone bipolar cells excite AII
+# vision [7,8]. Under cone-driven conditions, ON cone bipolar cells excite AII
 # amacrine cells through gap junctions and, in turn, AII amacrince cells
 # release inhibitory neurotransmitters onto OFF bipolar cells and OFF ganglion
 # cells.
@@ -58,18 +58,18 @@
 # for example, values of C_m , g_L , E_ex and E_in). The leak reversal
 # potential, E_L , was adjusted in horizontal cells and bipolar cells to force
 # a resting potential in the dark of about -45 mV, as observed experimentally
-# [8,9], and in amacrine cells for a resting potential of about -65 mV. For
+# [9,10], and in amacrine cells for a resting potential of about -65 mV. For
 # ganglion cells, we chose values of the leak reversal potential and the
 # threshold potential, V_th , to keep the cell constantly depolarized,
 # resulting in a spontaneous firing rate of about 40 spikes/s. Values of the
 # synaptic activation functions, θ_syn and k_syn , were set to force a synaptic
-# threshold below resting potential [9].
+# threshold below resting potential [10].
 #
 # 5) Synaptic dictionaries include a circular mask of radius R and a kernel of
 # constant probability. Weights of synaptic connections are generated according
 # to a Gaussian distribution of standard deviation sigma. The value of sigma in
 # midget cells corresponds to the radius of the receptive field center of P
-# cells (0.03 deg) [10]. The surround of the receptive field is accounted for by
+# cells (0.03 deg) [11]. The surround of the receptive field is accounted for by
 # horizontal cells (0.1 deg). To create the spatially coextensive receptive
 # field of the blue-yellow pathway, the value of sigma of S-ON bipolar cells is
 # the same as that of diffuse bipolar cells. To approximate experimental
@@ -77,31 +77,44 @@
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
-# [2] Snellman, J., Kaur, T., Shen, Y., Nawy, S.: Regulation of on bipolar cell
+#
+# [3] Snellman, J., Kaur, T., Shen, Y., Nawy, S.: Regulation of on bipolar cell
 # activity. Progress in retinal and eye research 27(4), 450–463 (2008)
-# [3] Nawy, S., Jahr, C.E.: Suppression by glutamate of cgmp-activated
+#
+# [4] Nawy, S., Jahr, C.E.: Suppression by glutamate of cgmp-activated
 # conductance in retinal bipolar cells. Nature 346(6281), 269 (1990)
-# [4] Vardi, N., Zhang, L.L., Payne, J.A., Sterling, P.: Evidence that
+#
+# [5] Vardi, N., Zhang, L.L., Payne, J.A., Sterling, P.: Evidence that
 # different cation chloride cotransporters in retinal neurons allow opposite
 # responses to gaba. Journal of Neuroscience 20(20), 7657–7663 (2000)
-# [5] Masland, R.H.: The fundamental plan of the retina. Nature neuroscience
+#
+# [6] Masland, R.H.: The fundamental plan of the retina. Nature neuroscience
 # 4(9),877–886 (2001)
-# [6] Demb, J.B., Singer, J.H.: Intrinsic properties and functional circuitry
+#
+# [7] Demb, J.B., Singer, J.H.: Intrinsic properties and functional circuitry
 # of the aii amacrine cell. Visual neuroscience 29(01), 51–60 (2012)
-# [7] Manookin, M.B., Beaudoin, D.L., Ernst, Z.R., Flagel, L.J., Demb, J.B.:
+#
+# [8] Manookin, M.B., Beaudoin, D.L., Ernst, Z.R., Flagel, L.J., Demb, J.B.:
 # Disinhibition combines with excitation to extend the operating range of the
 # off visual pathway in daylight. Journal of Neuroscience 28(16), 4136–4150
 # (2008)
-# [8] Arman, A.C., Sampath, A.P.: Dark-adapted response threshold of off
+#
+# [9] Arman, A.C., Sampath, A.P.: Dark-adapted response threshold of off
 # ganglion cells is not set by off bipolar cells in the mouse retina. Journal
 # of neurophysiology 107(10), 2649–2659 (2012)
-# [9] Smith, R.G.: Simulation of an anatomically defined local circuit: the cone-
+#
+# [10] Smith, R.G.: Simulation of an anatomically defined local circuit: the cone-
 # horizontal cell network in cat retina. Visual neuroscience 12(03), 545–561
 # (1995)
-# [10] Croner, L.J., Kaplan, E.: Receptive fields of p and m ganglion cells
+#
+# [11] Croner, L.J., Kaplan, E.: Receptive fields of p and m ganglion cells
 # across the primate retina. Vision research 35(1), 7–24 (1995)
 #
 # Author: Martinez-Cañada, P. (pablomc@ugr.es)
@@ -188,10 +201,10 @@ def get_Models():
     "V_th": -55.0,
     "V_reset": -60.0,
     "t_ref":  2.0,
-    "rate": 0.0
+    "rate": 0.0 # Not used
     }
 
-    # gaussian noise current
+    # Gaussian noise current
     retina_noise = 'noise_generator'
     retina_noise_params = {
     'mean': 0.0, # pA
