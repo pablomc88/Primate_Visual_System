@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -12,15 +12,20 @@
 # Name: test_vanHateren
 #
 # Description: example of performance of the different stages in van Hateren's
-# model. The model reproduces results shown in Fig. 6 [2] using a simple stimulus,
+# model. The model reproduces results shown in Fig. 6 [3] using a simple stimulus,
 # a 100-ms step of contrast 2 at a background illuminance of 100 td.
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
-# [2] van Hateren, Hans. "A cellular and molecular model of response kinetics
+#
+# [3] van Hateren, Hans. "A cellular and molecular model of response kinetics
 # and adaptation in primate cones and horizontal cells." Journal of vision 5.4
 # (2005): 5-5.
 #

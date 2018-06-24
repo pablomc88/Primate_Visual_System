@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -12,15 +12,19 @@
 # Name: ex4_disk_area_response
 #
 # Description: retina response to flashing spots of varying diameter plotted as
-# response versus spot diameter (area-response curve) [2]
+# response versus spot diameter (area-response curve) [3]
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
-# [2] Ruksenas, O., I. T. Fjeld, and P. Heggelund. "Spatial summation and
+# [3] Ruksenas, O., I. T. Fjeld, and P. Heggelund. "Spatial summation and
 # center-surround antagonism in the receptive field of single units in the dorsal
 # lateral geniculate nucleus of cat: comparison with retinal input." Visual
 # neuroscience 17.6 (2000): 855-870.
@@ -60,15 +64,15 @@ class experiment_4(object):
         self.start_time = 200.0
 
         # disk parameters
-        self.disk_diameters = [0.0,0.05,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,1.0] # degrees
-#        self.disk_diameters = [0.0,0.05,0.15,0.2,0.3,0.5] # degrees
+#        self.disk_diameters = [0.0,0.05,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,1.0] # degrees
+        self.disk_diameters = [0.15,0.5] # degrees
 
         # Pulse parameters
         self.pulse_duration = 500.0 # ms
         self.pulse_tstart = 500.0 # ms (first 300 ms are used to fill the input and
                                 # output buffers of linear filters)
-        self.bkg_illuminance = 100.0 # td
-        self.pulse_contrast = 16.0
+        self.bkg_illuminance = 250.0 # td
+        self.pulse_contrast = 0.8
         self.pulse_amplitude = self.pulse_contrast * self.bkg_illuminance # td
 
         # Cell to analyze
@@ -77,7 +81,7 @@ class experiment_4(object):
         self.isCenterCell = True
 
         # PSTH bin size
-        self.bin_size = 40.0 # ms
+        self.bin_size = 10.0 # ms
 
         # Layers to track (labels for figures)
         self.labels = ['H1_Horizontal_cells',
@@ -551,8 +555,13 @@ class experiment_4(object):
             fig.subplots_adjust(hspace=1.5)
             fig.subplots_adjust(wspace=0.4)
 
+            if self.topographical_isSpikes:
+                recs = self.spikes
+            else:
+                recs = self.potentials
+
             data_analysis.topographical(fig,self.newSimulation.Params['N'],self.topographical_time_intervals,
-            self.newSimulation.Params['resolution'],self.simtime,self.spikes,
+            self.newSimulation.Params['resolution'],self.simtime,recs,
             self.top_layers_to_record,self.top_labels,self.topographical_rows,self.topographical_cols,
             self.topographical_V_mins,self.topographical_V_maxs,self.topographical_isSpikes,
             self.trials,self.top_PSTHs,self.bin_size,self.top_PSTH_index,0)
@@ -578,7 +587,7 @@ class experiment_4(object):
 
         data_analysis.spatialTuning(self.disk_diameters,self.area_amp,self.area_ph,
         self.area_labels,self.area_rows,self.area_cols,0,0,'Disk diameter (deg)',
-       "Ampl. (mV or s^(-1))")
+       "Ampl. (mV or s^(-1))",'retina')
 
         plt.show()
 

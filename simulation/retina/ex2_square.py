@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -21,15 +21,20 @@
 # to the L-M cone contrast of the chromatic squares
 #
 # 3) Cone contrast is computed from the amount of cone excitation (E) in the square
-# relative to the cone excitation in the gray background and expressed as [2]:
+# relative to the cone excitation in the gray background and expressed as [3]:
 # C_cone = (E_square - E_bkg)/ E_bkg
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
-# [2] Stromeyer, C. F., G. R. Cole, and R. E. Kronauer. "Second-site adaptation
+#
+# [3] Stromeyer, C. F., G. R. Cole, and R. E. Kronauer. "Second-site adaptation
 # in the red-green chromatic pathways." Vision Research 25.2 (1985): 219-237.
 #
 # Author: Martinez-Cañada, P. (pablomc@ugr.es)
@@ -55,33 +60,33 @@ class experiment_2(object):
         self.simtime = 1000.0
 
         # Number of trials
-        self.trials = 5
+        self.trials = 2
 
         # Folder to save spike times
-        self.spike_folder = 'red_square'
+        self.spike_folder = 'flashing_square'
 
-        # Stimulus type
+        # ID of the stimulus type
         self.stim = '_square_'
 
         # Type of square:
         # 0 = red square, 1 = green square, 2 = black square, 3 = white square
-        self.square_type = 0
+        self.square_type = 2
 
         # Start time of plots
         self.start_time = 200.0
 
         # Center of the square (in number of cells)
-        self.square_center = [10.0,10.0]
+        self.square_center = [19.5,19.5]
 
         # Side length (in number of cells)
-        self.side_length = 3.0
+        self.side_length = 20.0
 
         # Pulse parameters
-        self.pulse_duration = 300.0 # ms
+        self.pulse_duration = 250.0 # ms
         self.pulse_tstart = 500.0 # ms (first 300 ms are used to fill the input and
                                 # output buffers of linear filters)
         self.bkg_illuminance = 250.0 # td
-        self.pulse_contrast = 1.0
+        self.pulse_contrast = 0.8
         self.pulse_amplitude = self.pulse_contrast * self.bkg_illuminance # td
 
         # Cell to analyze
@@ -90,7 +95,7 @@ class experiment_2(object):
         self.isCenterCell = True
 
         # PSTH bin size
-        self.bin_size = 20.0 # ms
+        self.bin_size = 10.0 # ms
 
         # Layers to track (labels for figures)
         self.labels = ['H1_Horizontal_cells',
@@ -126,8 +131,8 @@ class experiment_2(object):
 
         ## Graphical parameters ##
 
-        self.plot_intracellular = True
-        self.plot_PSTH = True
+        self.plot_intracellular = False
+        self.plot_PSTH = False
         self.plot_topographical = True
 
         # Individual intracellular traces
@@ -145,10 +150,10 @@ class experiment_2(object):
 
         # Topographical plot
         self.topographical_rows = 2
-        self.topographical_cols = 4
-        self.topographical_time_intervals = [0.0,250.0,500.0,750.0,1000.0]
-        self.topographical_V_mins = [0.0, 0.0]
-        self.topographical_V_maxs = [150.0, 150.0]
+        self.topographical_cols = 5
+        self.topographical_time_intervals = [450.0,500.0,550.0,600.0,750.0,800.0]
+        self.topographical_V_mins = [0.0, 0.0, 0.0, 0.0, 0.0]
+        self.topographical_V_maxs = [200.0, 200.0, 200.0, 200.0, 200.0]
         self.topographical_isSpikes = True # (False = membrane potential, True = spikes)
 
         ## End of parameters ##
@@ -493,8 +498,13 @@ class experiment_2(object):
             fig.subplots_adjust(hspace=1.5)
             fig.subplots_adjust(wspace=0.4)
 
+            if self.topographical_isSpikes:
+                recs = self.spikes
+            else:
+                recs = self.potentials
+
             data_analysis.topographical(fig,self.newSimulation.Params['N'],self.topographical_time_intervals,
-            self.newSimulation.Params['resolution'],self.simtime,self.spikes,
+            self.newSimulation.Params['resolution'],self.simtime,recs,
             self.top_layers_to_record,self.top_labels,self.topographical_rows,self.topographical_cols,
             self.topographical_V_mins,self.topographical_V_maxs,self.topographical_isSpikes,
             self.trials,self.top_PSTHs,self.bin_size,self.top_PSTH_index,0)

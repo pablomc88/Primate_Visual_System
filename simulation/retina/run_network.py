@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -14,12 +14,16 @@
 # Description: creation and simulation of the retina network
 #
 # Warning: when using more than 1 thread in NEST, topology connections are not
-# correctly configured between the model types 'parvo_neuron' since both have no
+# correctly configured between the model types 'parvo_neuron' since they have no
 # proxies and are local receivers.
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
@@ -82,8 +86,8 @@ class runNetwork(object):
 
         # Simulation parameters
         self.Params = {
-            'N': 20, # number of cells per row
-            'visSize': 1.0, # visual angle (degrees)
+            'N': 40, # number of cells per row
+            'visSize': 2.0, # visual angle (degrees)
             'NEST_threads': 1, # threads used in NEST simulation (must be 1)
             'photo_processes': 10, # processes used to compute the response of one
                                   # type of photoreceptor (the total number of
@@ -368,7 +372,9 @@ class runNetwork(object):
         recorders = []
 
         for population, model in recorded_models:
+
                 rec = nest.Create('RecordingNode')
+
                 recorders.append([rec,population,model])
                 tgts = [nd for nd in nest.GetLeaves(population)[0] if nest.GetStatus([nd],
                 'model')[0]==model]
@@ -394,4 +400,3 @@ class runNetwork(object):
         nest.Simulate(self.Params['simtime'])
 
         return recorders,spike_detectors
-

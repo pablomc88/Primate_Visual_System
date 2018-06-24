@@ -33,12 +33,6 @@ import numpy as np
 import time
 
 import nest
-
-# Install modules before importing mpi4py (to prevent errors with mpi4py)
-nest.Install("parvo_neuron_module")
-nest.Install("AII_amacrine_module")
-nest.Install("ganglion_cell_module")
-
 from mpi4py import MPI
 
 # Initialize the MPI environment
@@ -50,11 +44,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import data_analysis
 import run_network
-import ex1_disk
-import ex2_square
-import ex3_grating_spatial_freq
-import ex4_disk_area_response
-import ex5_receptive_field
+import ex1_flash
+import ex2_grating_spatial_freq
+import ex3_disk_area_response
+import ex4_receptive_field
 
 # Experiment to simulate
 select_ex = 1
@@ -63,63 +56,41 @@ select_ex = 1
 def worker(stim,select_ex,ex_value,aux_stimulus_value=0):
     print ("\n--- Rank: %s, Trials: %s ---\n" % (rank,stim))
 
-    # Initialize mosaic of the grating only once
-    if select_ex == 3:
-        ex = ex3_grating_spatial_freq.experiment_3()
-
-        if(ex.generate_random_mosaic):
-            ex.randomMosaic()
-            ex.generate_random_mosaic = False
-
-    # Create RF mask for experiment 5
-    if select_ex == 5:
-        ex = ex5_receptive_field.experiment_5()
+    # Create RF mask for experiment 4
+    if select_ex == 4:
+        ex = ex4_receptive_field.experiment_4()
         ex.createRFmask()
 
     for tr in stim:
 
         # Flashing spot
         if select_ex == 1:
-            ex = ex1_disk.experiment_1()
-            # Avoid simulation of photoreceptors
-            ex.newSimulation.Params['load_cone_from_file'] = True
-            ex.simulatePhotoreceptors()
-            ex.NESTSimulation(False)
-            ex.saveSpikes(ex.stim,ex.spike_folder,tr)
-
-        # Square
-        elif select_ex == 2:
-            ex = ex2_square.experiment_2()
-            ex.newSimulation.Params['load_cone_from_file'] = True
-            ex.simulatePhotoreceptors()
-            ex.NESTSimulation(False)
+            ex = ex1_flash.experiment_1()
+            ex.NESTSimulation(tr)
             ex.saveSpikes(ex.stim,ex.spike_folder,tr)
 
         # Grating
-        elif select_ex == 3:
-            ex.newSimulation.Params['load_cone_from_file'] = True
-            ex.simulatePhotoreceptors(ex_value)
-            ex.NESTSimulation(False)
+        elif select_ex == 2:
+            ex = ex2_grating_spatial_freq.experiment_2()
+            ex.NESTSimulation(tr,'_sf_'+str(ex_value))
             ex.saveSpikes('_sf_'+str(ex_value),ex.spike_folder,tr)
 
         # Area-response curves
-        elif select_ex == 4:
-            ex = ex4_disk_area_response.experiment_4()
-            ex.newSimulation.Params['load_cone_from_file'] = True
-            ex.simulatePhotoreceptors(ex_value)
-            ex.NESTSimulation(False)
-            ex.saveSpikes(ex.stim+str(ex_value),ex.spike_folder,tr)
+        elif select_ex == 3:
+            ex = ex3_disk_area_response.experiment_3()
+            ex.NESTSimulation(tr,'_disk_'+str(ex_value))
+            ex.saveSpikes('_disk_'+str(ex_value),ex.spike_folder,tr)
 
         # RF
-        elif select_ex == 5:
-            ex.newSimulation.Params['load_cone_from_file'] = True
-            ex.simulatePhotoreceptors(ex_value,aux_stimulus_value)
-            ex.NESTSimulation(False)
+        elif select_ex == 4:
 
             if aux_stimulus_value == 0:
-                ex.saveSpikes(ex.stim+"_bright_"+str(ex_value),ex.spike_folder,tr)
+                ex.NESTSimulation(tr,"_disk_"+"_bright_"+str(ex_value))
+                ex.saveSpikes("_disk_"+"_bright_"+str(ex_value),ex.spike_folder,tr)
             else:
-                ex.saveSpikes(ex.stim+"_dark_"+str(ex_value),ex.spike_folder,tr)
+                ex.NESTSimulation(tr,"_disk_"+"_dark_"+str(ex_value))
+                ex.saveSpikes("_disk_"+"_dark_"+str(ex_value),ex.spike_folder,tr)
+
 
     return 1
 
@@ -136,26 +107,32 @@ def main():
     if rank == 0:
         start_c = time.time()
 
-    # Initialize experiment object
+    # Create an instance of the experiment.
     # ex_stimulus: range of stimulus values
-    # aux_stimulus_value: only used by ex. 5 to differentiate bright (0) from
+    # aux_stimulus_value: only used by ex. 4 to differentiate bright (0) from
     # dark (1) stimuli
-    if select_ex ==3:
-        ex = ex3_grating_spatial_freq.experiment_3()
+    if select_ex ==1:
+        ex = ex1_flash.experiment_1()
+        ex_stimulus = [0]
+        aux_stimulus_value = [0]
+        ex.initializeFolders()
+
+    if select_ex ==2:
+        ex = ex2_grating_spatial_freq.experiment_2()
         ex_stimulus = ex.spatial_frequency
         aux_stimulus_value = np.zeros(len(ex_stimulus))
         if rank == 0:
             ex.initializeFolders()
 
-    elif select_ex ==4:
-        ex = ex4_disk_area_response.experiment_4()
+    elif select_ex ==3:
+        ex = ex3_disk_area_response.experiment_3()
         ex_stimulus = ex.disk_diameters
         aux_stimulus_value = np.zeros(len(ex_stimulus))
         if rank == 0:
             ex.initializeFolders()
 
-    elif select_ex ==5:
-        ex = ex5_receptive_field.experiment_5()
+    elif select_ex ==4:
+        ex = ex4_receptive_field.experiment_4()
         ex.createRFmask()
 
         ex_stimulus = []
@@ -170,30 +147,12 @@ def main():
         if rank == 0:
             ex.initializeFolders()
 
-    else:
-        ex_stimulus = [0]
 
     c = 0
+
     for ex_value in ex_stimulus:
-        # Create an instance of the experiment and simulate photoreceptors (only
-        # once by process with rank = 0)
         if rank==0:
             print ("\n--- Experiment value: %s ---\n" % ex_value)
-            if select_ex ==1:
-                ex = ex1_disk.experiment_1()
-                ex.initializeFolders()
-                ex.simulatePhotoreceptors()
-
-            elif select_ex ==2:
-                ex = ex2_square.experiment_2()
-                ex.initializeFolders()
-                ex.simulatePhotoreceptors()
-
-            elif select_ex ==3 or select_ex ==4:
-                ex.simulatePhotoreceptors(ex_value)
-
-            elif select_ex ==5:
-                ex.simulatePhotoreceptors(ex_value,aux_stimulus_value[c])
 
         # Divide data into chunks
         if rank == 0:

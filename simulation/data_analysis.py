@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -15,11 +15,15 @@
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
-# [2] Nawrot, Martin, Ad Aertsen, and Stefan Rotter. "Single-trial estimation
+# [3] Nawrot, Martin, Ad Aertsen, and Stefan Rotter. "Single-trial estimation
 # of neuronal firing rates: from single-neuron spike trains to population
 # activity." Journal of neuroscience methods 94.1 (1999): 81-92.
 #
@@ -102,11 +106,11 @@ layer_sizes):
 
         j+=1
 
-# Gaussian kernel function for single-trial estimation of neuronal firing rates [2]
+# Gaussian kernel function for single-trial estimation of neuronal firing rates [3]
 def kernel(t,sigma):
     return (1.0 / (np.sqrt(2.0*np.pi)*sigma)) * np.exp(-t**2 / (2.0 * sigma**2))
 
-# Method to estimate the neuronal firing rate from single-trial spike trains [2]
+# Method to estimate the neuronal firing rate from single-trial spike trains [3]
 def singleTrialPSTH(start_time,sim_time,spike_times):
 
     sigma = 0.020 # s
@@ -333,7 +337,7 @@ visual_stage,path="../../data/"):
 
 # Spatial tuning curve: it can be either spatial-frequency curve or area-response curve
 def spatialTuning(x_axis,amplitude,phase,labels,rows,cols,starting_row,
-starting_col,x_axis_label,y_axis_label):
+starting_col,x_axis_label,y_axis_label,visual_stage="retina",path="../../data/"):
 
     # x-array for interpolation
     x = np.arange(x_axis[0],x_axis[len(x_axis)-1],
@@ -379,6 +383,11 @@ starting_col,x_axis_label,y_axis_label):
 
             x0, x1, y0, y1 = Vax.axis()
             Vax.axis((x0,x1,y0-5.0,y1+5.0))
+
+            # save data
+            np.savetxt(path+visual_stage+'/data/'+labels[n]+'_amp', amplitude[n])
+            np.savetxt(path+visual_stage+'/data/'+labels[n]+'_ph', phase[n])
+            np.savetxt(path+visual_stage+'/data/'+labels[n]+'_freq', x_axis)
 
         if(current_col<cols-1):
             current_col+=1
@@ -540,6 +549,12 @@ path="../../data/"):
             else:
                 Vax.set_title(str(intervals_Vm))
 
+            # Save image
+#            fake_fig = plt.figure()
+#            im_plot = plt.matshow(pop_im/len(recorded_models),vmin=V_mins[0], vmax=V_maxs[0])
+#            plt.axis('off')
+#            plt.savefig(path+visual_stage+'/data/'+'population_average'+str(n)+'.png')
+
 
 # 2D receptive-field profile
 def receptiveField(fig,N,RF_intervals,s_layers_to_record,labels,RF_bright,RF_dark):
@@ -618,127 +633,3 @@ def videoSeq(number_cells,inputIm,simtime,resolution,video_step):
         linewidth=0, antialiased=False)
         ax.set_title('Input stimulus. Time = %s ms'%str(t),y=1.08)
         ax.axes.figure.canvas.draw()
-
-# Estimation of Local Field Potential(LFP)
-def updateLFP(LFP_records,recorders,recorded_models,layer_sizes,E_ex,E_in):
-
-    j = 0
-
-    for population, model in recorded_models:
-
-        # List of cell IDs
-        if(isinstance(layer_sizes, list) == False):
-            cell_list = np.arange(layer_sizes**2)
-        else:
-            cell_list = np.arange(layer_sizes[j])
-
-        [data,senders,pop] = getData(population,model,recorders,cell_list)
-
-        # Membrane potential
-        if 'V_m' in data[0]:
-            average_potential = np.zeros(len((data[0]['V_m'])[np.where(senders==pop[0])]))
-        else:
-            average_potential = np.zeros(len(LFP_records[0,j,:]))
-
-        # Synaptic currents
-        if 'g_ex' in data[0]:
-            average_currents_ex = np.zeros(len((data[0]['g_ex'])[np.where(senders==pop[0])]))
-        else:
-            average_currents_ex = np.zeros(len(LFP_records[1,j,:]))
-
-        if 'g_in' in data[0]:
-            average_currents_in = np.zeros(len((data[0]['g_in'])[np.where(senders==pop[0])]))
-        else:
-            average_currents_in = np.zeros(len(LFP_records[2,j,:]))
-
-        for cell in cell_list:
-
-            if 'V_m' in data[0]:
-                average_potential += (data[0]['V_m'])[np.where(senders==pop[cell])]
-
-            if 'g_ex' in data[0]:
-                if 'V_m' in data[0]:
-                    average_currents_ex += (data[0]['g_ex'])[np.where(senders==pop[cell])] *\
-                    ((data[0]['V_m'])[np.where(senders==pop[cell])] - E_ex[j])
-                else:
-                    average_currents_ex += (data[0]['g_ex'])[np.where(senders==pop[cell])]
-
-            if 'g_in' in data[0]:
-                if 'V_m' in data[0]:
-                    average_currents_in += (data[0]['g_in'])[np.where(senders==pop[cell])] *\
-                    ((data[0]['V_m'])[np.where(senders==pop[cell])] - E_in[j])
-                else:
-                    average_currents_in += (data[0]['g_in'])[np.where(senders==pop[cell])]
-
-
-        average_potential /= len(cell_list)
-        average_currents_ex /= len(cell_list)
-        average_currents_in /= len(cell_list)
-
-        LFP_records[0,j,:] += average_potential
-        LFP_records[1,j,:] += average_currents_ex
-        LFP_records[2,j,:] += average_currents_in
-
-        j+=1
-
-def LFP(plot_type,LFP_records,trials,start_time,time_step,sim_time,recorded_models,
-PSTHs,top_PSTH_index,bin_size,labels,rows,cols,starting_row,starting_col,visual_stage,
-layer_sizes,path = '../../data/'):
-
-    j = 0
-    spike_j = 0
-    current_row = starting_row
-    current_col = starting_col
-
-    for population, model in recorded_models:
-
-        if(current_row<rows and current_col<cols):
-            Vax = plt.subplot2grid((rows,cols), (current_row,current_col))
-
-            # Membrane potential and synaptic currents
-            if plot_type < 3:
-                average_record = LFP_records[plot_type,j,:] / trials
-                y = average_record[int(start_time/time_step):len(average_record)]
-                time = np.arange(start_time,sim_time+time_step,time_step)
-                time = time[0:len(y)]
-
-            # Firing rates
-            else:
-                if model == 'retina_parvo_ganglion_cell' or model=='LGN_relay_cell' or\
-                model == 'LGN_interneuron' or model=='Cortex_excitatory_cell' or\
-                model=='Cortex_inhibitory_cell':
-                    # List of cell IDs
-                    if(isinstance(layer_sizes, list) == False):
-                        cell_list = np.arange(layer_sizes**2)
-                    else:
-                        cell_list = np.arange(layer_sizes[j])
-
-                    average_record = (1000.0/bin_size) *\
-                    np.sum(PSTHs[:,top_PSTH_index[spike_j],:],axis=0) / (trials * len(cell_list))
-
-                    y = average_record[int(start_time/bin_size):len(average_record)]
-                    time = np.arange(start_time,sim_time,bin_size)
-
-                    spike_j+=1
-
-                else:
-                    y = np.zeros(2)
-                    time = np.zeros(2)
-
-            Vax.plot(time,y)
-            Vax.set_title(labels[j])
-
-        # save data
-        np.savetxt(path+visual_stage+'/data/'+labels[j]+'_'+str(plot_type), y)
-        if j==0:
-            np.savetxt(path+visual_stage+'/data/time', time)
-
-        if(current_col<cols-1):
-            current_col+=1
-        else:
-            current_col = 0
-            current_row+=1
-
-        j+=1
-
-    Vax.set_xlabel('time (ms)')

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -11,19 +11,25 @@
 #
 # Name: ex5_receptive_field
 #
+# Warning: software not tested!
+#
 # Description: Estimation of spatiotemporal receptive-fields. The space is
 # divided in a grid of sampling points and bright and dark spots are briefly
 # flashed for 40 ms at every point, measuring the response to the center cell.
 # A composite receptive-field profile is obtained by computing the difference
-# between the responses the bright and dark stimuli [2]
+# between the responses the bright and dark stimuli [3]
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
-# [2] DeAngelis, Gregory C., Izumi Ohzawa, and R. D. Freeman. "Spatiotemporal
+# [3] DeAngelis, Gregory C., Izumi Ohzawa, and R. D. Freeman. "Spatiotemporal
 # organization of simple-cell receptive fields in the cat's striate cortex. I.
 # General characteristics and postnatal development." Journal of neurophysiology
 # 69.4 (1993): 1091-1117.
@@ -51,19 +57,23 @@ class experiment_5(object):
         self.simtime = 600.0
 
         # Number of trials
-        self.trials = 5
+        self.trials = 2
 
         # Folder to save spike times
-        self.spike_folder = 'receptive_field'
+        self.spike_folder = 'Receptive_field'
 
         # Stimulus type
         self.stim = '_disk_'
 
         # Square mask where stimuli are displayed (side = 2*mask_side+1)
-        self.mask_side = 2
+        self.mask_side = 4
+
+        # Type of stimulus:
+        # 0 = red, 1 = green, 2 = black/white
+        self.stimulus_type = 2
 
         # Intervals to average
-        self.RF_intervals = [[310.0,350.0],[350.0,390.0],[400.0,440.0]]
+        self.RF_intervals = [[320.0,340.0],[340.0,360.0],[360.0,380.0],[380.0,400.0],[400.0,420.0]]
 
         # Start time of plots
         self.start_time = 200.0
@@ -76,14 +86,14 @@ class experiment_5(object):
         self.pulse_tstart = 300.0 # ms (first 300 ms are used to fill the input and
                                 # output buffers of linear filters)
         self.bkg_illuminance = 250.0 # td
-        self.pulse_contrast = 1.0
+        self.pulse_contrast = 0.8
         self.pulse_amplitude = self.pulse_contrast * self.bkg_illuminance # td
 
         # Cell to analyze
         self.selected_cell = 210
 
         # PSTH bin size
-        self.bin_size = 40.0 # ms
+        self.bin_size = 10.0 # ms
 
         # Layers to track (labels for figures)
         self.labels = [
@@ -104,7 +114,9 @@ class experiment_5(object):
         # Parameters of the topographical plot
         self.top_labels = [
         'Midget_ganglion_cells_L_ON',
-        'Midget_ganglion_cells_L_OFF'
+        'Midget_ganglion_cells_L_OFF',
+        'Midget_ganglion_cells_M_ON',
+        'Midget_ganglion_cells_M_OFF'
         ]
 
         ## Graphical parameters ##
@@ -223,14 +235,36 @@ class experiment_5(object):
 
         if(t*resolution >= self.pulse_tstart and
         t*resolution < self.pulse_tstart + self.pulse_duration):
-            if dark_st==0:
-                input = self.bkg_illuminance + self.pulse_amplitude
-            else:
-                input = self.bkg_illuminance - self.pulse_amplitude
-        else:
-            input = self.bkg_illuminance
 
-        return [input,input,input]
+            if (self.stimulus_type == 0):
+                if dark_st==0:
+                    L_input = self.pulse_amplitude/2.0 + self.bkg_illuminance
+                    M_input = self.bkg_illuminance - self.pulse_amplitude/2.0
+                else:
+                    L_input = self.bkg_illuminance - self.pulse_amplitude/2.0
+                    M_input = self.pulse_amplitude/2.0 + self.bkg_illuminance
+
+            elif (self.stimulus_type == 1):
+                if dark_st==0:
+                    L_input = self.bkg_illuminance - self.pulse_amplitude/2.0
+                    M_input = self.pulse_amplitude/2.0 + self.bkg_illuminance
+                else:
+                    L_input = self.pulse_amplitude/2.0 + self.bkg_illuminance
+                    M_input = self.bkg_illuminance - self.pulse_amplitude/2.0
+
+            elif (self.stimulus_type == 2):
+                if dark_st==0:
+                    L_input = self.bkg_illuminance + self.pulse_amplitude
+                    M_input = self.bkg_illuminance + self.pulse_amplitude
+                else:
+                    L_input = self.bkg_illuminance - self.pulse_amplitude
+                    M_input = self.bkg_illuminance - self.pulse_amplitude
+
+        else:
+            L_input = self.bkg_illuminance
+            M_input = self.bkg_illuminance
+
+        return [L_input,M_input,0.0]
 
     # Initialize arrays with NEST IDs
     def loadLayers(self,layer_IDs):
@@ -486,8 +520,13 @@ class experiment_5(object):
             fig.subplots_adjust(hspace=1.5)
             fig.subplots_adjust(wspace=0.4)
 
+            if self.topographical_isSpikes:
+                recs = self.spikes
+            else:
+                recs = self.potentials
+
             data_analysis.topographical(fig,self.newSimulation.Params['N'],self.topographical_time_intervals,
-            self.newSimulation.Params['resolution'],self.simtime,self.spikes,
+            self.newSimulation.Params['resolution'],self.simtime,recs,
             self.top_layers_to_record,self.top_labels,self.topographical_rows,self.topographical_cols,
             self.topographical_V_mins,self.topographical_V_maxs,self.topographical_isSpikes,
             self.trials,self.top_PSTHs,self.bin_size,self.top_PSTH_index,0)

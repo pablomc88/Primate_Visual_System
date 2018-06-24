@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -16,7 +16,11 @@
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
@@ -43,25 +47,25 @@ class experiment_1(object):
         self.simtime = 1000.0
 
         # Number of trials
-        self.trials = 5
+        self.trials = 4
 
         # Folder to save spike times
         self.spike_folder = 'flashing_spot'
 
-        # Stimulus type
+        # ID of the stimulus type
         self.stim = '_disk_'
 
         # Start time of plots
         self.start_time = 200.0
 
         # Select disk/annulus (0 = disk, 1 = annulus)
-        self.shape = 0.0
+        self.shape = 0
         # spot type (0 = white spot, 1 = black spot)
         self.spot_type = 0
         # disk/annulus parameters
-        self.inner_radius = 0.09 # degrees (L-M pathway)
-        #self.inner_radius = 0.15 # degrees (S pathway)
-#        self.inner_radius = 0.6 # degrees (full-field flash)
+#        self.inner_radius = 0.09 # degrees (L-M pathway)
+#        self.inner_radius = 0.15 # degrees (S pathway)
+        self.inner_radius = 0.5 # degrees (full-field flash)
         self.outer_radius = 0.5 # degrees
 
         # Pulse parameters
@@ -69,7 +73,7 @@ class experiment_1(object):
         self.pulse_tstart = 500.0 # ms (first 300 ms are used to fill the input and
                                 # output buffers of linear filters)
         self.bkg_illuminance = 250.0 # td (value per cone type)
-        self.pulse_contrast = 1.0
+        self.pulse_contrast = 0.8
         self.pulse_amplitude = self.pulse_contrast * self.bkg_illuminance # td
 
         # Cell to analyze
@@ -78,7 +82,7 @@ class experiment_1(object):
         self.isCenterCell = True
 
         # PSTH bin size
-        self.bin_size = 40.0 # ms
+        self.bin_size = 10.0 # ms
 
         # Layers to track (labels for figures)
         self.labels = ['H1_Horizontal_cells',
@@ -93,8 +97,8 @@ class experiment_1(object):
         'Midget_ganglion_cells_L_ON',
         'Midget_ganglion_cells_L_OFF',
         'Midget_ganglion_cells_M_ON',
-        'Midget_ganglion_cells_M_OFF',
-        'Small_bistratified_ganglion_cells_S_ON'
+        'Midget_ganglion_cells_M_OFF'
+#        'Small_bistratified_ganglion_cells_S_ON'
         ]
 
         # Spiking layers
@@ -102,23 +106,26 @@ class experiment_1(object):
         'Midget_ganglion_cells_L_ON',
         'Midget_ganglion_cells_L_OFF',
         'Midget_ganglion_cells_M_ON',
-        'Midget_ganglion_cells_M_OFF',
-        'Small_bistratified_ganglion_cells_S_ON'
+        'Midget_ganglion_cells_M_OFF'
+#        'Small_bistratified_ganglion_cells_S_ON'
         ]
 
         # Parameters of the topographical plot
         self.top_labels = [
+#        'Midget_bipolar_cells_L_ON',
+#        'Midget_bipolar_cells_L_OFF'
         'Midget_ganglion_cells_L_ON',
-        'Midget_ganglion_cells_L_OFF',
-        'Midget_ganglion_cells_M_ON',
-        'Midget_ganglion_cells_M_OFF'
+        'Midget_ganglion_cells_L_OFF'
+#        'Midget_ganglion_cells_M_ON',
+#        'Midget_ganglion_cells_M_OFF'
+#        'Small_bistratified_ganglion_cells_S_ON'
         ]
 
         ## Graphical parameters ##
 
         self.plot_intracellular = True
         self.plot_PSTH = True
-        self.plot_topographical = False
+        self.plot_topographical = True
 
         # Individual intracellular traces
         self.intracellular_rows = 6
@@ -134,11 +141,13 @@ class experiment_1(object):
         self.PSTH_starting_col = 1
 
         # Topographical plot
-        self.topographical_rows = 4
-        self.topographical_cols = 4
-        self.topographical_time_intervals = [0.0,250.0,500.0,750.0,1000.0]
-        self.topographical_V_mins = [0.0, 0.0, 0.0, 0.0]
-        self.topographical_V_maxs = [150.0, 150.0, 150.0, 150.0]
+        self.topographical_rows = 2
+        self.topographical_cols = 5
+        self.topographical_time_intervals = [450.0,500.0,550.0,600.0,750.0,800.0]
+#        self.topographical_V_mins = [-45.5, -45.5, -45.5, -45.5, -45.5]
+#        self.topographical_V_maxs = [-41.5, -41.5, -41.5, -41.5, -41.5]
+        self.topographical_V_mins = [0.0, 0.0, 0.0, 0.0, 0.0]
+        self.topographical_V_maxs = [200.0, 200.0, 200.0, 200.0, 200.0]
         self.topographical_isSpikes = True # (False = membrane potential, True = spikes)
 
         ## End of parameters ##
@@ -182,7 +191,6 @@ class experiment_1(object):
             self.usetop_PSTHs = True # True = update PSTHS for topographical plot (slower)
         else:
             self.usetop_PSTHs = False
-
 
     # Initialize/clean folders
     def initializeFolders(self):
@@ -484,8 +492,13 @@ class experiment_1(object):
             fig.subplots_adjust(hspace=1.5)
             fig.subplots_adjust(wspace=0.4)
 
+            if self.topographical_isSpikes:
+                recs = self.spikes
+            else:
+                recs = self.potentials
+
             data_analysis.topographical(fig,self.newSimulation.Params['N'],self.topographical_time_intervals,
-            self.newSimulation.Params['resolution'],self.simtime,self.spikes,
+            self.newSimulation.Params['resolution'],self.simtime,recs,
             self.top_layers_to_record,self.top_labels,self.topographical_rows,self.topographical_cols,
             self.topographical_V_mins,self.topographical_V_maxs,self.topographical_isSpikes,
             self.trials,self.top_PSTHs,self.bin_size,self.top_PSTH_index,0)

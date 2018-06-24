@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -17,7 +17,11 @@
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
@@ -137,6 +141,8 @@ def plotSpatialTuning(ex,N,stim,layer_sizes,path):
 
     # Compute harmonic responses
     for f in ex.spatial_frequency:
+        print ("\n--- Freq = %s  cpd ---\n" % f)
+
         if(isinstance(layer_sizes, list) == False):
             data_analysis.initializePSTHs(ex,"retina",False,N,
             ex.FFT_labels,'_sf_'+str(f),0,path)
@@ -149,9 +155,14 @@ def plotSpatialTuning(ex,N,stim,layer_sizes,path):
 
     fig = plt.figure()
 
-    data_analysis.spatialTuning(ex.spatial_frequency,ex.FFTamp,ex.FFTph,
-    ex.FFT_labels,ex.FFT_rows,ex.FFT_cols,0,0,'Spatial frequency (cpd)',
-   "Ampl. (mV or s^(-1))")
+    if(isinstance(layer_sizes, list) == False):
+        data_analysis.spatialTuning(ex.spatial_frequency,ex.FFTamp,ex.FFTph,
+        ex.FFT_labels,ex.FFT_rows,ex.FFT_cols,0,0,'Spatial frequency (cpd)',
+       "Ampl. (mV or s^(-1))",'retina',"../data/")
+    else:
+        data_analysis.spatialTuning(ex.spatial_frequency,ex.FFTamp,ex.FFTph,
+        ex.FFT_labels,ex.FFT_rows,ex.FFT_cols,0,0,'Spatial frequency (cpd)',
+       "Ampl. (mV or s^(-1))",'thalamocortical_system',"../data/")
 
 
 def plotAreaResponse(ex,N,stim,layer_sizes,path):

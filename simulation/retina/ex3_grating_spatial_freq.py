@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# This file is part of the project published in [1].
+# This file is part of the project published in [1,2].
 #
 # The software is licensed under the GNU General Public License. You should have
 # received a copy of the GNU General Public License along with the source code.
@@ -26,7 +26,11 @@
 #
 # References:
 #
-# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
+# [1] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2018). A Neuronal Network Model
+# of the Primate Visual System: Color Mechanisms in the Retina, LGN and V1. In
+# International Journal of Neural Systems. Accepted for publication.
+#
+# [2] Martinez-Cañada, P., Morillas, C., Pelayo, F. (2017). A Conductance-Based
 # Neuronal Network Model for Color Coding in the Primate Foveal Retina. In IWINAC
 # 2017
 #
@@ -57,11 +61,7 @@ class experiment_3(object):
         self.trials = 2
 
         # Folder to save spike times
-        self.spike_folder = 'Grating_Luminance'
-#        self.spike_folder = 'Grating_Chromatic'
-#        self.spike_folder = 'Grating_L_cone'
-#        self.spike_folder = 'Grating_M_cone'
-#        self.spike_folder = 'test'
+        self.spike_folder = 'Luminance_Grating'
 
         # Type of grating:
         # (0 = luminance grating, 1 = chromatic isoluminant grating (L vs M), 2 =
@@ -70,15 +70,15 @@ class experiment_3(object):
         self.grating_type = 0
 
         # Grating parameters
-        self.spatial_frequency = np.array([0.1,0.5,1.0,2.0,3.0,4.0,5.0,6.0]) # cpd
-#        self.spatial_frequency = np.array([0.1,0.5,1.0,3.0,4.0,5.0]) # cpd
+#        self.spatial_frequency = np.array([0.1,0.2,0.3,0.4,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0]) # cpd
+        self.spatial_frequency = np.array([1.0,3.0]) # cpd
         self.temporal_frequency = 2.0 # Hz
         self.bkg_illuminance = 250.0 # td
         # Michelson contrast:
         # Imax = bkg + ampl
         # Imin = bkg - ampl
         # contrast = (Imax - Imin)/(Imax + Imin) = ampl/bkg
-        self.contrast = 0.6
+        self.contrast = 0.8
 
         # Random distribution of cones
         self.generate_random_mosaic = False
@@ -94,7 +94,7 @@ class experiment_3(object):
         self.isCenterCell = True
 
         # PSTH bin size
-        self.bin_size = 40.0 # ms
+        self.bin_size = 10.0 # ms
 
         # Layers to track (labels for figures)
         self.labels = [
@@ -127,8 +127,8 @@ class experiment_3(object):
         self.FFT_labels = [
         'Midget_ganglion_cells_L_ON',
         'Midget_ganglion_cells_L_OFF',
-        'Midget_ganglion_cells_M_ON',
-        'Midget_ganglion_cells_M_OFF'
+#        'Midget_ganglion_cells_M_ON'
+#        'Midget_ganglion_cells_M_OFF'
         ]
 
         ## Graphical parameters ##
@@ -150,7 +150,7 @@ class experiment_3(object):
         self.PSTH_starting_col = 1
 
         # FFT plot
-        self.FFT_rows = 2
+        self.FFT_rows = 1
         self.FFT_cols = 2
 
         ## End of parameters ##
@@ -661,7 +661,7 @@ class experiment_3(object):
 
         data_analysis.spatialTuning(self.spatial_frequency,self.FFTamp,self.FFTph,
         self.FFT_labels,self.FFT_rows,self.FFT_cols,0,0,'Spatial frequency (cpd)',
-       "Ampl. (mV or s^(-1))")
+       "Ampl. (mV or s^(-1))",'retina')
 
         plt.show()
 
